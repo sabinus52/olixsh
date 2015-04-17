@@ -90,6 +90,8 @@ logger_debug "OLIX_ARGS=${OLIX_ARGS}"
 [[ -z ${OLIX_ARGS} ]] && stdout_printUsage && core_exit 0
 
 
+core_checkInstall ${OLIX_ARGS}
+
 command_execute ${OLIX_ARGS}
 
 echo 'FIN'

@@ -9,6 +9,11 @@
 # Pointeur de temps de départ du script
 OLIX_CORE_EXEC_START=${SECONDS}
 
+# Nom du fichier de l'interpréteur
+OLIX_CORE_SHELL_NAME="olixsh"
+# Lien vers l'interpréteur olixsh
+OLIX_CORE_SHELL_LINK="/usr/bin/otestsh"
+
 
 ###
 # Sortie du programme shell avec nettoyage
@@ -40,6 +45,25 @@ function core_checkIfRoot()
     logger_debug "core_checkIfRoot ()"
     [[ $(id -u) != 0 ]] && return 1
     return 0
+}
+
+
+###
+# Vérifie si l'installation de oliXsh est complète
+# @param $1 $2 : Commandes
+##
+function core_checkInstall()
+{
+    logger_debug "core_checkInstall ($1, $2)"
+
+    [[ "$1" == "install" && "$2" == "olix" ]] && return 0
+
+    logger_info "Vérification de la présence de lien ${OLIX_CORE_SHELL_LINK}"
+    if [[ ! -x ${OLIX_CORE_SHELL_LINK} ]]; then
+        logger_warning "${OLIX_CORE_SHELL_LINK} absent"
+        logger_warning "oliXsh n'a pas été installé correctement. Relancer le script './olixsh install olix'"
+        echo && return 1
+    fi
 }
 
 

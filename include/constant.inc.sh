@@ -10,10 +10,7 @@
 # Paramètres système NON modifiable
 ##
 
-# Nom du fichier de l'interpréteur
-OLIX_SHELL_NAME="olixsh"
-# Lien vers l'interpréteur olixsh
-OLIX_SHELL_LINK="/bin/olixsh"
+
 # Fichier de config systeme contenant les informations sur l'emplacement de la configuration
 OLIX_CONFIG_FILE="/etc/olix"
 
@@ -32,6 +29,12 @@ OLIX_OPTION_HELP=false
 ##
 OLIX_SYSTEM_TIME=$(date '+%X')
 OLIX_SYSTEM_DATE=$(date '+%F')
+
+
+###
+# Liste des binaires requis
+##
+OLIX_BINARIES_REQUIRED="logger gzip tar wget"
 
 
 ###

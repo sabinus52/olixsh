@@ -8,9 +8,18 @@
 
 OLIX_COMMAND_NAME="install"
 
+
+###
+# Librairies necessaires
+##
 source lib/module.lib.sh
+source lib/system.lib.sh
 source lib/filesystem.lib.sh
 
+
+###
+# Usage de la commande
+##
 olixcmd_usage()
 {
     logger_debug "command_install__olixcmd_usage ()"
@@ -21,11 +30,14 @@ olixcmd_usage()
     echo -e "${CBLANC} Usage : ${CVIOLET}$(basename ${OLIX_ROOT_SCRIPT}) ${CVERT}install ${CJAUNE}[MODULE]${CVOID}"
     echo
     echo -e "${CJAUNE}Liste des MODULES disponibles${CVOID} :"
-    echo -e "${Cjaune} olixsh ${CVOID}      : Installation de oliXsh sur le système"
+    echo -e "${Cjaune} olix ${CVOID}        : Installation de oliXsh sur le système"
     module_printList
 }
 
 
+###
+# Function principale
+##
 olixcmd_main()
 {
     logger_debug "command_install__olixcmd_main ($@)"
@@ -36,52 +48,29 @@ olixcmd_main()
     [[ "$1" == "help" ]] && olixcmd_usage && core_exit 0
 
     case ${MODULE} in
-        olixsh) olixcmd__olixsh;;
-        *)      olixcmd__module $1;;
+        olix) olixcmd__olixsh;;
+        *)    olixcmd__module $1;;
     esac
 }
 
 
-olixcmd__olixsh()
-{
-    logger_debug "command_install__olixcmd__olixsh ()"
-    #source $(command_getSubScript ${OLIX_COMMAND_NAME} olixsh)
-    #olix_cmd_main $@
-    echo "coucou olixsh"
-
-#    which logger > /dev/null 2>&1
-#    [[ $? -ne 0 ]] && logger_warning "Le binaire \"logger\" n'est pas présent"
-#    which gzip > /dev/null 2>&1
-#    [[ $? -ne 0 ]] && logger_warning "Le binaire \"gzip\" n'est pas présent"
-#    which bzip2 > /dev/null 2>&1
-#    [[ $? -ne 0 ]] && logger_warning "Le binaire \"bzip2\" n'est pas présent"
-#    which tar > /dev/null 2>&1
-#    [[ $? -ne 0 ]] && logger_warning "Le binaire \"tar\" n'est pas présent"
-#    which rsync > /dev/null 2>&1
-#    [[ $? -ne 0 ]] && logger_warning "Le binaire \"rsync\" n'est pas présent"
-#    which mysql > /dev/null 2>&1
-#    [[ $    ? -ne 0 ]] && logger_warning "Le binaire \"mysql\" n'est pas présent"
-#    which mysqldump > /dev/null 2>&1
-#    [[ $? -ne 0 ]] && logger_warning "Le binaire \"mysqldump\" n'est pas présent"
-#    which lftp > /dev/null 2>&1
-#    [[ $? -ne 0 ]] && logger_warning "Le binaire \"lftp\" n'est pas présent"
-#    wget
-}
-
-
+###
+# Installation du module
+# @param $1 : Nom du module
+##
 olixcmd__module()
 {
     logger_debug "command_install__olixcmd__olixsh ($1)"
 
     logger_info "Vérification du module $1"
     if ! $(module_isExist $1); then
-        logger_warning "Le module $1 est inéxistant"
+        logger_warning "Le module '$1' est inéxistant"
         exit 1
     fi
 
     logger_info "Vérification si le module est installé"
     if $(module_isInstalled $1); then
-        logger_warning "Le module $1 est déjà installé"
+        logger_warning "Le module '$1' est déjà installé"
         exit 1
     fi
 
@@ -91,7 +80,44 @@ olixcmd__module()
     
     module_deploy $1
     [[ $? -ne 0 ]] && logger_error "Impossible de déployer le module $1"
-    #source $(command_getSubScript ${OLIX_COMMAND_NAME} olixsh)
-    #olix_cmd_main $@
-    echo "coucou $1"
+}
+
+
+###
+# Installation de Olix dans le système
+##
+olixcmd__olixsh()
+{
+    logger_debug "command_install__olixcmd__olixsh ()"
+
+    # Fore l'activation des warnings
+    OLIX_OPTION_WARNINGS=true
+
+    # Test si ROOT
+    logger_info "Test si root"
+    core_checkIfRoot
+    [[ $? -ne 0 ]] && logger_error "Seulement root peut executer l'installation d'oliXsh"
+
+    echo -e "${CBLANC}Installation de oliXsh dans le système${CVOID}"
+    echo -e "${CBLANC}--------------------------------------${CVOID}"
+
+    logger_info "Vérification des binaires requis"
+    system_whichBinaries "${OLIX_BINARIES_REQUIRED}"
+    [[ $? -ne 0 ]] && echo && logger_warning "ATTENTION !!! Ces binaires sont requis pour le bon fonctionnement de oliXsh" && echo
+
+    olixcmd__createLinkShell
+
+    echo -e "${CVERT}L'installation s'est terminé avec succès${CVOID}"
+}
+
+
+###
+# Effectue un lien vers l'interpréteur olixsh depuis /bin/olixsh pour l'installation
+##
+function olixcmd__createLinkShell()
+{
+    logger_debug "olixcmd__createLinkShell ()"
+    logger_info "Création du lien ${OLIX_CORE_SHELL_LINK}"
+    ln -sf $(pwd)/${OLIX_CORE_SHELL_NAME} ${OLIX_CORE_SHELL_LINK} > ${OLIX_LOGGER_FILE_ERR} 2>&1
+    [[ $? -ne 0 ]] && logger_error "Impossible de créer le lien ${OLIX_CORE_SHELL_LINK}"
 }
