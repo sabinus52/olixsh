@@ -7,7 +7,7 @@
 
 
 
-OLIX_COMMAND_LIST_FILENAME="commands.lst"
+OLIX_COMMAND_LIST="install update"
 
 
 ###
@@ -16,16 +16,8 @@ OLIX_COMMAND_LIST_FILENAME="commands.lst"
 function command_printList()
 {
     logger_debug "command_printList ()"
-    local COMMAND
-
-    pad=$(printf '%0.1s' " "{1..60})
-
-    while read I; do
-        IFS=':' read -ra COMMAND <<< "$I"
-        echo -en "${Cjaune} ${COMMAND[0]} ${CVOID} "
-        stdout_strpad "${COMMAND[0]}" 10 " "
-        echo -e " : ${COMMAND[1]}"
-    done < ./commands/${OLIX_COMMAND_LIST_FILENAME}
+    echo -e "${Cjaune} install ${CVOID} : Installation des modules oliXsh"
+    echo -e "${Cjaune} update  ${CVOID} : Mise à jour des modules oliXsh "
 }
 
 
@@ -43,7 +35,7 @@ function command_execute()
     if command_isExist "$1"; then
         source ${SCRIPT}
         shift
-        olix_cmd_main $@
+        olixcmd_main $@
         core_exit 0
     fi
     logger_warning "La commande $1 est inexistante"
@@ -58,6 +50,17 @@ function command_execute()
 function command_getScript()
 {
     echo -n "${OLIX_ROOT}/commands/$1.sh"
+}
+
+
+###
+# Retourne le nom du script a executer
+# @param $1 : Nom de la commande
+# @param $2 : Nom de la sous commande
+##
+function command_getSubScript()
+{
+    echo -n "${OLIX_ROOT}/commands/$1/$2.sh"
 }
 
 

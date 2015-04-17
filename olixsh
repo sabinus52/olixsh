@@ -35,11 +35,12 @@ fi
 ###
 # Chargement des librairies
 ##
-source lib/constant.inc.sh
-source lib/core.inc.sh
-source lib/logger.inc.sh
-source lib/stdout.inc.sh
-source lib/command.inc.sh
+source include/constant.inc.sh
+source include/core.inc.sh
+source include/logger.inc.sh
+source include/stdout.inc.sh
+source include/command.inc.sh
+source include/module.inc.sh
 
 
 logger_checkLogger

@@ -42,7 +42,7 @@ function stdout_printUsage()
     logger_debug "stdout_printUsage ()"
     stdout_printVersion
     echo
-    echo -e "${CBLANC} Usage : ${CVIOLET}$(basename ${OLIX_ROOT_SCRIPT}) ${Ccyan}[OPTIONS] ${CJAUNE}COMMAND ${Cjaune}[PARAMETER]${CVOID}"
+    echo -e "${CBLANC} Usage : ${CVIOLET}$(basename ${OLIX_ROOT_SCRIPT}) ${Ccyan}[OPTIONS] ${CJAUNE}COMMAND|MODULE ${Cjaune}[PARAMETER]${CVOID}"
     echo
     echo -e "${Ccyan}OPTIONS${CVOID}"
     echo -en "${CBLANC}  --help|-h          ${CVOID} : "; echo "Affiche cet écran d'aide."
@@ -53,6 +53,8 @@ function stdout_printUsage()
     echo
     echo -e "${CJAUNE}COMMANDS${CVOID}"
     command_printList
+    echo
+    echo -e "${CJAUNE}MODULES${CVOID}"
 }
 
 
