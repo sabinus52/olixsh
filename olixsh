@@ -94,7 +94,4 @@ core_checkInstall ${OLIX_ARGS}
 
 command_execute ${OLIX_ARGS}
 
-echo 'FIN'
-
-
 core_exit 0

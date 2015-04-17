@@ -49,6 +49,28 @@ function core_checkIfRoot()
 
 
 ###
+# Vérifie que ce soit le propriétaire qui puisse exécuter le script
+##
+function core_checkIfOwner()
+{
+    logger_debug "core_checkIfOwner ()"
+    local OWNER=$(core_getOwner)
+    [[ ${LOGNAME} != ${OWNER} ]] && return 1
+    return 0
+}
+
+
+###
+# Retourne le propriétaire où est installé oliXsh
+##
+function core_getOwner()
+{
+    logger_debug "system_getOwner (${OLIX_ROOT})"
+    echo $(stat -c %U ${OLIX_ROOT})
+}
+
+
+###
 # Vérifie si l'installation de oliXsh est complète
 # @param $1 $2 : Commandes
 ##

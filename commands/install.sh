@@ -62,6 +62,11 @@ olixcmd__module()
 {
     logger_debug "command_install__olixcmd__olixsh ($1)"
 
+    # Test si c'est le propriétaire
+    logger_info "Test si c'est le propriétaire"
+    core_checkIfOwner
+    [[ $? -ne 0 ]] && logger_error "Seul l'utilisateur \"$(core_getOwner)\" peut exécuter ce script"
+    
     logger_info "Vérification du module $1"
     if ! $(module_isExist $1); then
         logger_warning "Le module '$1' est inéxistant"

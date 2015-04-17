@@ -16,6 +16,16 @@ function filesystem_getExtension()
 
 
 ###
+# Retourne le propriétaire d'un fichier ou répertoire
+##
+function filesystem_getOwner()
+{
+    logger_debug "system_getOwnerOfFile ($1)"
+    echo $(stat -c %U $1)
+}
+
+
+###
 # Extrait une archive dans un emplacement désiré
 # @param $1 : Nom du fichier
 # @param $2 : Emplacement

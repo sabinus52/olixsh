@@ -33,7 +33,7 @@ function module_download()
     local OPTS="--tries=3 --timeout=30 --no-check-certificate"
     [[ ${OLIX_OPTION_VERBOSEDEBUG} == true ]] && OPTS="${OPTS} --debug"
     [[ ${OLIX_OPTION_VERBOSE} == true ]] && OPTS="${OPTS} --verbose"
-    OPTS="${OPTS} --output-document=/tmp/olixmodule.tar.gz"
+    OPTS="${OPTS} --output-document=/tmp/olix.module.tar.gz"
     logger_debug "wget ${OPTS} ${URL}"
 
     wget ${OPTS} ${URL}
@@ -49,10 +49,10 @@ function module_deploy()
 {
     logger_debug "module_deploy ($1)"
 
-    filesystem_extractTAR "/tmp/olixmodule.tar.gz" "${OLIX_ROOT}/${OLIX_MODULE_DIR}" "--gzip"
+    filesystem_extractTAR "/tmp/olix.module.tar.gz" "${OLIX_ROOT}/${OLIX_MODULE_DIR}" "--gzip"
     [[ $? -ne 0 ]] && return 1
 
-    logger_info "Renommage de olixshmodule-$1 ver $1"
+    logger_info "Renommage de 'olixshmodule-$1' vers '$1'"
     mv ${OLIX_ROOT}/${OLIX_MODULE_DIR}/olixshmodule-$1 ${OLIX_ROOT}/${OLIX_MODULE_DIR}/$1 > ${OLIX_LOGGER_FILE_ERR} 2>&1
     [[ $? -ne 0 ]] && return 1
     return 0
