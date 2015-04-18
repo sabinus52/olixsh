@@ -1,6 +1,6 @@
 ###
 # DON'T TOUCH
 ##
-ubuntu|https://test|Installation des packages Ubuntu
+ubuntu|https://test|Installation et gestion des packages Ubuntu
 mysql|http://mysql.fr/toto.tar.gz|Utilitaires pour les bases mysql
 test|http://172.16.34.123/test.tar.gz|Module de test

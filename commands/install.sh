@@ -18,6 +18,12 @@ source lib/filesystem.lib.sh
 
 
 ###
+# Constantes
+##
+OLIX_COMMAND_COMPLETION="/etc/bash_completion.d/olixsh"
+
+
+###
 # Usage de la commande
 ##
 olixcmd_usage()
@@ -32,6 +38,24 @@ olixcmd_usage()
     echo -e "${CJAUNE}Liste des MODULES disponibles${CVOID} :"
     echo -e "${Cjaune} olix ${CVOID}        : Installation de oliXsh sur le système"
     module_printList
+}
+
+
+###
+# Fonction de liste
+##
+olixcmd_list()
+{
+    logger_debug "command_install__olixcmd_list ($@)"
+    while [[ $# -ge 1 ]]; do
+        case $1 in
+            --with-olix) 
+                echo -n "olix "
+                ;;
+        esac
+        shift
+    done
+    module_getListAvailable
 }
 
 
@@ -111,6 +135,7 @@ olixcmd__olixsh()
     [[ $? -ne 0 ]] && echo && logger_warning "ATTENTION !!! Ces binaires sont requis pour le bon fonctionnement de oliXsh" && echo
 
     olixcmd__createLinkShell
+    olixcmd__createLinkCompletion
 
     echo -e "${CVERT}L'installation s'est terminé avec succès${CVOID}"
 }
@@ -125,4 +150,20 @@ function olixcmd__createLinkShell()
     logger_info "Création du lien ${OLIX_CORE_SHELL_LINK}"
     ln -sf $(pwd)/${OLIX_CORE_SHELL_NAME} ${OLIX_CORE_SHELL_LINK} > ${OLIX_LOGGER_FILE_ERR} 2>&1
     [[ $? -ne 0 ]] && logger_error "Impossible de créer le lien ${OLIX_CORE_SHELL_LINK}"
+}
+
+
+###
+# Effectue un lien vers la completion
+##
+function olixcmd__createLinkCompletion()
+{
+    logger_debug "olixcmd__createLinkCompletion ()"
+    logger_info "Création du lien ${OLIX_COMMAND_COMPLETION}"
+    if [[ -d $(dirname ${OLIX_COMMAND_COMPLETION}) ]]; then
+        ln -sf $(pwd)/completion/olixmain ${OLIX_COMMAND_COMPLETION} > ${OLIX_LOGGER_FILE_ERR} 2>&1
+        [[ $? -ne 0 ]] && logger_warning "Impossible de créer le lien ${OLIX_COMMAND_COMPLETION}" && logger_warning "La completion ne sera pas active !"
+    else
+        logger_warning "Apparement aucune completion n'a été trouvée !"
+    fi
 }

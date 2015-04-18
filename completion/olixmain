@@ -1,0 +1,45 @@
+_olixsh() 
+{
+    local cur prev opts opts2
+    COMPREPLY=()
+    cur="${COMP_WORDS[COMP_CWORD]}"
+    prev="${COMP_WORDS[COMP_CWORD-1]}"
+    prev2="${COMP_WORDS[COMP_CWORD-2]}"
+    opts="--help --debug --verbose --no-warnings --version"
+    cmds="install update"
+    mods=$(otestsh update --list)
+
+    case "${prev2}" in
+        install)
+            COMPREPLY=( $(compgen -A file -- ${cur}) )
+            return 0
+            ;;
+        update)
+            COMPREPLY=( $(compgen -W "cfg1 cf2" -- ${cur}) )
+            return 0
+            ;;
+    esac
+
+    case "${prev}" in
+        install)
+            COMPREPLY=( $(compgen -W "olixsh ubuntu test" -- ${cur}) )
+            return 0
+            ;;
+        update)
+            COMPREPLY=( $(compgen -W "cfg1 cf2" -- ${cur}) )
+            return 0
+            ;;
+    esac
+
+    case "${cur}" in    
+        -*)
+            COMPREPLY=( $(compgen -W "${opts}" -- ${cur}) )
+            return 0
+            ;;
+        *)  COMPREPLY=( $(compgen -W "${cmds} ${mods}" -- ${cur}) )
+            return 0
+            ;;
+    esac
+}
+
+complete -F _olixsh otestsh

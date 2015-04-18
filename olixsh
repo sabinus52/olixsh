@@ -52,6 +52,7 @@ logger_checkLogger
 OLIX_ARGS=""
 while [[ $# -ge 1 ]]; do
     case $1 in
+        # Paramètres communes
         -d|--debug) 
             OLIX_OPTION_VERBOSEDEBUG=true
             OLIX_OPTION_VERBOSE=true
@@ -72,6 +73,11 @@ while [[ $# -ge 1 ]]; do
             core_exit 0
             ;;
         
+        # Paramètres communes mais cachés pour afficher des listes dans les commandes ou modules
+        --list)
+            OLIX_OPTION_LIST=true
+            ;;
+
         *)
             OLIX_ARGS="${OLIX_ARGS} $1"
             ;;

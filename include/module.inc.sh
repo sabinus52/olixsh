@@ -31,6 +31,30 @@ function module_printList()
 
 
 ###
+# Retourne la liste des modules disponibles
+##
+function module_getListAvailable()
+{
+    logger_debug "module_getListAvailable ()"
+    local MODULE
+    while read I; do
+        IFS='|' read -ra MODULE <<< "$I"
+        echo -n "${MODULE[0]} "
+    done < <(grep -v "^#" ${OLIX_MODULE_REPOSITORY})
+}
+
+
+###
+# Retourne le liste des modules activés ou déjà installés
+##
+function module_getListEnabled()
+{
+    logger_debug "module_getListEnabled ()"
+    echo $(ls -d ${OLIX_MODULE_DIR}/*/ | cut -f2 -d'/')
+}
+
+
+###
 # Test si le module existe
 # @param $1 : Nom du module
 ##

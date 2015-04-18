@@ -35,7 +35,12 @@ function command_execute()
     if command_isExist "$1"; then
         source ${SCRIPT}
         shift
-        olixcmd_main $@
+        if [[ ${OLIX_OPTION_LIST} == true ]]; then
+            # Pour afficher des listes simple utile pour la complétion
+            olixcmd_list $@
+        else
+            olixcmd_main $@
+        fi
         core_exit 0
     fi
     logger_warning "La commande $1 est inexistante"
