@@ -55,7 +55,15 @@ function stdout_printUsage()
     command_printList
     echo
     echo -e "${CJAUNE}MODULES${CVOID}"
+    module_printListInstalled
 }
 
 
-
+###
+# Affiche l'erreur de module non trouvé
+##
+function stdout_printNoCommandNoModule()
+{
+    logger_debug "stdout_printNoCommandNoModule ($1)"
+    logger_warning "La commande ou le module \"$1\" n'existe pas"
+}

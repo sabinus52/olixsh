@@ -105,3 +105,17 @@ function core_getTimeExec()
 {
     echo -n $((SECONDS-OLIX_CORE_EXEC_START))
 }
+
+
+###
+# Si un item est contenu dans une liste
+# @param $1 : Item à chercher
+# @param $2 : Liste
+##
+function core_contains()
+{
+    local LIST="$2"
+    local ITEM="$1"
+    [[ ${LIST} =~ (^|[[:space:]])"${ITEM}"($|[[:space:]]) ]] && return 0
+    return 1
+}

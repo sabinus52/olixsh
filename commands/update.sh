@@ -32,7 +32,7 @@ olixcmd_usage()
     echo
     echo -e "${CJAUNE}Liste des MODULES disponibles${CVOID} :"
     echo -e "${Cjaune} olix ${CVOID}        : Mise à jour de oliXsh"
-    module_printList
+    module_printListInstalled
 }
 
 
@@ -50,7 +50,7 @@ olixcmd_list()
         esac
         shift
     done
-    module_getListEnabled
+    module_getListInstalled
 }
 
 

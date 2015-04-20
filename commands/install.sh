@@ -37,7 +37,7 @@ olixcmd_usage()
     echo
     echo -e "${CJAUNE}Liste des MODULES disponibles${CVOID} :"
     echo -e "${Cjaune} olix ${CVOID}        : Installation de oliXsh sur le système"
-    module_printList
+    module_printListAvailable
 }
 
 
@@ -82,7 +82,7 @@ olixcmd_main()
 # Installation du module
 # @param $1 : Nom du module
 ##
-olixcmd__module()
+function olixcmd__module()
 {
     logger_debug "command_install__olixcmd__olixsh ($1)"
 
@@ -115,7 +115,7 @@ olixcmd__module()
 ###
 # Installation de Olix dans le système
 ##
-olixcmd__olixsh()
+function olixcmd__olixsh()
 {
     logger_debug "command_install__olixcmd__olixsh ()"
 

@@ -2,7 +2,7 @@
 # Librairies de la gestion de système de fichiers
 # ==============================================================================
 # @package olixsh
-# @author Olivier
+# @author Olivier <sabinus52@gmail.com>
 ##
 
 

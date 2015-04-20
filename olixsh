@@ -38,6 +38,7 @@ fi
 source include/constant.inc.sh
 source include/core.inc.sh
 source include/logger.inc.sh
+source include/config.inc.sh
 source include/stdout.inc.sh
 source include/command.inc.sh
 source include/module.inc.sh
@@ -98,6 +99,15 @@ logger_debug "OLIX_ARGS=${OLIX_ARGS}"
 
 core_checkInstall ${OLIX_ARGS}
 
-command_execute ${OLIX_ARGS}
+if command_isExist ${OLIX_ARGS}; then
+    command_execute ${OLIX_ARGS}
+else if module_isInstalled ${OLIX_ARGS}; then
+    module_execute ${OLIX_ARGS}
+else
+    stdout_printNoCommandNoModule ${OLIX_ARGS}
+    stdout_printUsage
+fi
+fi
+
 
 core_exit 0

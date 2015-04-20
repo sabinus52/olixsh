@@ -16,8 +16,8 @@ OLIX_COMMAND_LIST="install update"
 function command_printList()
 {
     logger_debug "command_printList ()"
-    echo -e "${Cjaune} install ${CVOID} : Installation des modules oliXsh"
-    echo -e "${Cjaune} update  ${CVOID} : Mise à jour des modules oliXsh "
+    echo -e "${Cjaune} install ${CVOID}     : Installation des modules oliXsh"
+    echo -e "${Cjaune} update  ${CVOID}     : Mise à jour des modules oliXsh "
 }
 
 

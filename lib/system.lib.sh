@@ -2,7 +2,7 @@
 # Librairies de la gestion du système
 # ==============================================================================
 # @package olixsh
-# @author Olivier
+# @author Olivier <sabinus52@gmail.com>
 ##
 
 
