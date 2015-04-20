@@ -135,7 +135,7 @@ function olixcmd__olixsh()
     [[ $? -ne 0 ]] && echo && logger_warning "ATTENTION !!! Ces binaires sont requis pour le bon fonctionnement de oliXsh" && echo
 
     olixcmd__createLinkShell
-    olixcmd__createLinkCompletion
+    olixcmd__createFileCompletion
 
     echo -e "${CVERT}L'installation s'est terminé avec succès${CVOID}"
 }
@@ -154,15 +154,22 @@ function olixcmd__createLinkShell()
 
 
 ###
-# Effectue un lien vers la completion
+# Créer le fichier de la completion
 ##
-function olixcmd__createLinkCompletion()
+function olixcmd__createFileCompletion()
 {
-    logger_debug "olixcmd__createLinkCompletion ()"
-    logger_info "Création du lien ${OLIX_COMMAND_COMPLETION}"
+    logger_debug "olixcmd__createFileCompletion ()"
+    logger_info "Création du fichier ${OLIX_COMMAND_COMPLETION}"
     if [[ -d $(dirname ${OLIX_COMMAND_COMPLETION}) ]]; then
-        ln -sf $(pwd)/completion/olixmain ${OLIX_COMMAND_COMPLETION} > ${OLIX_LOGGER_FILE_ERR} 2>&1
-        [[ $? -ne 0 ]] && logger_warning "Impossible de créer le lien ${OLIX_COMMAND_COMPLETION}" && logger_warning "La completion ne sera pas active !"
+
+cat > ${OLIX_COMMAND_COMPLETION} <<EOT
+OLIX_ROOT_COMP=$(pwd)
+if [[ -r $(pwd)/completion/olixmain ]]; then
+    source $(pwd)/completion/olixmain
+fi
+EOT
+
+        [[ $? -ne 0 ]] && logger_warning "Impossible de créer le fichier ${OLIX_COMMAND_COMPLETION}" && logger_warning "La completion ne sera pas active !"
     else
         logger_warning "Apparement aucune completion n'a été trouvée !"
     fi

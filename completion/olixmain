@@ -1,33 +1,43 @@
 _olixsh() 
 {
-    local cur prev opts opts2
+    local cur prev opts opts2 prev2 mods
     COMPREPLY=()
     cur="${COMP_WORDS[COMP_CWORD]}"
     prev="${COMP_WORDS[COMP_CWORD-1]}"
     prev2="${COMP_WORDS[COMP_CWORD-2]}"
     opts="--help --debug --verbose --no-warnings --version"
     cmds="install update"
-    mods=$(otestsh update --list)
+    mods=$(${OLIX_ROOT_COMP}/olixsh update --list)
 
     case "${prev2}" in
-        install)
-            COMPREPLY=( $(compgen -A file -- ${cur}) )
-            return 0
-            ;;
-        update)
-            COMPREPLY=( $(compgen -W "cfg1 cf2" -- ${cur}) )
-            return 0
+        *)
+            if [[ ${mods} =~ (^|[[:space:]])"${prev2}"($|[[:space:]]) ]] ; then
+                if [[ -r ${OLIX_ROOT_COMP}/completion/${prev2} ]]; then
+                    source ${OLIX_ROOT_COMP}/completion/${prev2}
+                    _olixsh_module
+                    return 0
+                fi
+            fi
             ;;
     esac
 
     case "${prev}" in
         install)
-            COMPREPLY=( $(compgen -W "olixsh ubuntu test" -- ${cur}) )
+            COMPREPLY=( $(compgen -W "$(${OLIX_ROOT_COMP}/olixsh install --list --with-olix)" -- ${cur}) )
             return 0
             ;;
         update)
             COMPREPLY=( $(compgen -W "cfg1 cf2" -- ${cur}) )
             return 0
+            ;;
+        *)
+            if [[ ${mods} =~ (^|[[:space:]])"${prev}"($|[[:space:]]) ]] ; then
+                if [[ -r ${OLIX_ROOT_COMP}/completion/${prev} ]]; then
+                    source ${OLIX_ROOT_COMP}/completion/${prev}
+                    _olixsh_module
+                    return 0
+                fi
+            fi
             ;;
     esac
 
