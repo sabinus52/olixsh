@@ -29,3 +29,41 @@ function file_parseYaml()
       }
    }'
 }
+
+
+###
+# Compression au format GZ d'un fichier
+# @param $1 : Nom du fichier
+# @return string : Nom du fichier compressé
+##
+function file_compressGZ()
+{
+   logger_debug "file_compressGZ ($1)"
+   local PARAM
+   [[ ${OLIX_OPTION_VERBOSE} == true ]] && PARAM="--verbose"
+
+   gzip ${PARAM} --force $1 > ${OLIX_LOGGER_FILE_ERR} 2>&1
+   [[ $? -ne 0 ]] && return 1
+
+   OLIX_FUNCTION_RESULT="$1.gz"
+   return 0
+}
+
+
+###
+# Compression au format BZ2 d'un fichier
+# @param $1 : Nom du fichier
+# @return string : Nom du fichier compressé
+##
+function file_compressBZ2()
+{
+   logger_debug "file_compressBZ2 ($1)"
+   local PARAM
+   [[ ${OLIX_OPTION_VERBOSE} == true ]] && PARAM="--verbose"
+
+   bzip2 ${PARAM} --force $1 > ${OLIX_LOGGER_FILE_ERR} 2>&1
+   [[ $? -ne 0 ]] && return 1
+
+   OLIX_FUNCTION_RESULT="$1.bz2"
+   return 0
+}

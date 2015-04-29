@@ -26,6 +26,19 @@ function filesystem_getOwner()
 
 
 ###
+# Vérifie si un fichier peut être créé
+# @param $1 : Nom du fichier
+# @return bool
+##
+function filesystem_isCreateFile()
+{
+    logger_debug "filesystem_isCreateFile ($1)"
+    [[ -w $1 ]] && return 0
+    return 1
+}
+
+
+###
 # Extrait une archive dans un emplacement désiré
 # @param $1 : Nom du fichier
 # @param $2 : Emplacement
