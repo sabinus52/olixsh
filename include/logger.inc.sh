@@ -153,3 +153,18 @@ function logger_error()
     fi
     core_exit 1 "$@"
 }
+
+
+###
+# Mode WARNING avec fichier d'erreur
+##
+function logger_warning2()
+{
+    local ERRFILE
+    if [[ -s ${OLIX_LOGGER_FILE_ERR} ]]; then
+        ERRFILE=$(cat ${OLIX_LOGGER_FILE_ERR})
+        logger_warning "${ERRFILE}"
+    else
+        logger_warning "$@"
+    fi
+}

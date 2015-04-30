@@ -39,6 +39,18 @@ function filesystem_isCreateFile()
 
 
 ###
+# Affiche la taille d'un fichier en mode compréhensible
+# @param $1 : Nom du fichier
+##
+function filesystem_getSizeFileHuman()
+{
+    logger_debug "filesystem_getSizeFileHuman ($1)"
+    [[ ! -f $1 ]] && echo -n "ERROR" && return
+    echo -n $(du -h $1 | awk '{print $1}')
+}
+
+
+###
 # Extrait une archive dans un emplacement désiré
 # @param $1 : Nom du fichier
 # @param $2 : Emplacement
