@@ -27,6 +27,10 @@ function backup_compress()
             file_compressGZ $2
             RET=$?
             ;;
+        NULL|null)
+            OLIX_FUNCTION_RESULT=$2
+            return 0
+            ;;
         *)
             logger_warning "Le type de compression \"$1\" n'est pas disponible"
             OLIX_FUNCTION_RESULT=$2
@@ -69,9 +73,9 @@ function backup_purge()
     report_printFile "${LIST_FILE_PURGED}" "font-size:0.8em;color:Olive;"
     [[ ${RET} -ne 0 ]] && report_warning && logger_warning2 && return 1
 
-    stdout_printInfo "Liste des sauvegardes restantes" "$(find $1 -name "$2" | wc -l)"
-    report_printInfo "Liste des sauvegardes restantes" "$(find $1 -name "$2" | wc -l)"
-    find $1 -name "$2" -printf "%f\n" |sort > ${LIST_FILE_PURGED}
+    stdout_printInfo "Liste des sauvegardes restantes" "$(find $1 -maxdepth 1 -name "$2" | wc -l)"
+    report_printInfo "Liste des sauvegardes restantes" "$(find $1 -maxdepth 1 -name "$2" | wc -l)"
+    find $1 -maxdepth 1 -name "$2" -printf "%f\n" |sort > ${LIST_FILE_PURGED}
     RET=$?
     stdout_printFile "${LIST_FILE_PURGED}"
     report_printFile "${LIST_FILE_PURGED}" "font-size:0.8em;color:SteelBlue;"

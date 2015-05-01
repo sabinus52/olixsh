@@ -41,17 +41,16 @@ function report_initialize()
 
 ###
 # Finalise le rapport et l'envoi pas mail le cas échéant
-# @param $1 : Format du rapport
-# @param $2 : Sujet du mail
+# @param $1 : Sujet du mail
 ##
 function report_terminate()
 {
-    logger_debug "report_terminate ($1, $2)"
+    logger_debug "report_terminate ($1)"
 
     report_printFooter
 
     if [[ ! -z ${OLIX_REPORT_EMAIL} ]]; then
-        core_sendMail "$1" "${OLIX_REPORT_EMAIL}" "${OLIX_REPORT_FILENAME}" "$2"
+        core_sendMail "${OLIX_REPORT_FORMAT}" "${OLIX_REPORT_EMAIL}" "${OLIX_REPORT_FILENAME}" "$1"
         [[ $? -ne 0 ]] && logger_warning "Impossible d'envoyer l'email à ${OLIX_REPORT_EMAIL}"
     fi
 }

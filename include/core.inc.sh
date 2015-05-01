@@ -119,3 +119,29 @@ function core_contains()
     [[ ${LIST} =~ (^|[[:space:]])"${ITEM}"($|[[:space:]]) ]] && return 0
     return 1
 }
+
+
+###
+# Envoi d'un mail
+# @param $1 : Format html ou text
+# @param $2 : Email
+# @param $3 : Chemin du fichier contenant le contenu du mail
+# @param $4 : Sujet du mail
+##
+function core_sendMail()
+{
+    logger_debug "core_sendMail ($1, $2, $3, $4)"
+
+    local SUBJECT SERVER
+    #SERVER="${OLIX_CONF_SERVER_NAME}"
+    #[[ -z ${SERVER} ]] && SERVER=${HOSTNAME}
+    SERVER=${HOSTNAME}
+    SUBJECT="[${SERVER}:${OLIX_MODULE}] $4"
+
+    if [[ "$1" == "html" || "$1" == "HTML" ]]; then
+        mailx -s "${SUBJECT}" -a "Content-type: text/html; charset=UTF-8" $2 < $3
+    else
+        mailx -s "${SUBJECT}" $2 < $3
+    fi
+    return $?
+}

@@ -33,7 +33,7 @@ function filesystem_getOwner()
 function filesystem_isCreateFile()
 {
     logger_debug "filesystem_isCreateFile ($1)"
-    [[ -w $1 ]] && return 0
+    [[ -w $(dirname $1) ]] && return 0
     return 1
 }
 

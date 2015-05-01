@@ -43,6 +43,26 @@ function stdin_readFile()
 
 
 ###
+# Lecture de la saisie d'un répertoire
+# @param $1 : Message à afficher
+# @param $2 : Valeur par défaut
+##
+function stdin_readDirectory()
+{
+    local RESPONSE
+    OLIX_STDIN_RETURN=$2
+    while true; do
+        echo -e $1
+        echo -en "[${CBLANC}${OLIX_STDIN_RETURN}${CVOID}] ? "
+        read -e -p "" RESPONSE
+        [[ ! -z ${RESPONSE} ]] && OLIX_STDIN_RETURN=${RESPONSE}
+        [[ -d ${OLIX_STDIN_RETURN} && -w ${OLIX_STDIN_RETURN} ]] && break
+        logger_warning "Le répertoire '${OLIX_STDIN_RETURN}' est inaccessible"
+    done
+}
+
+
+###
 # Demande de confirmation par oui ou non
 # @param $1 : Message à afficher
 # @param $2 : Valeur par défaut (true|false)
@@ -108,6 +128,29 @@ function stdin_readDoublePassword()
         [[ "${RESPONSE1}" == "${RESPONSE2}" ]] && break
     done
     OLIX_STDIN_RETURN=${RESPONSE1}
+}
+
+
+###
+# Lecture d'un choix de sélection
+# @param $1 : Message à afficher
+# @param $2 : Liste de choix
+# @param $3 : Valeur par défaut
+# @return string OLIX_STDIN_RETURN
+##
+function stdin_readSelect()
+{
+    logger_debug "stdin_readSelect ($1, $2, $3)"
+
+    OLIX_STDIN_RETURN=$3
+    while true; do
+        echo -e $1
+        echo -e "Choix : $2"
+        echo -en "[${CBLANC}${OLIX_STDIN_RETURN}${CVOID}] ? "
+        read RESPONSE
+        [[ ! -z ${RESPONSE} ]] && OLIX_STDIN_RETURN=${RESPONSE}
+        core_contains "${OLIX_STDIN_RETURN}" "$2" && break
+    done
 }
 
 

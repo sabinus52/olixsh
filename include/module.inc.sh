@@ -81,12 +81,14 @@ function module_execute()
     logger_debug "module_execute ($1) -> ${SCRIPT} avec ARGS : $@"
     logger_info "Execution du module $1"
 
-    if module_isExist "$1"; then
+    if module_isInstalled "$1"; then
         source ${SCRIPT}
         shift
         if [[ ${OLIX_OPTION_LIST} == true ]]; then
             # Pour afficher des listes simple utile pour la complétion
             olixmod_list $@
+        elif [[ "$1" == "init" ]]; then
+            module_initialize $@
         else
             olixmod_main $@
         fi
@@ -98,12 +100,58 @@ function module_execute()
 
 
 ###
+# Initialisation du module avec création de son fichier de configuration
+# @param $@
+##
+function module_initialize()
+{
+    logger_debug "module_initialize ($@)"
+    source lib/stdin.lib.sh
+
+    local FORCE=false
+    while [[ $# -ge 1 ]]; do
+        case $1 in
+            --force|-f) FORCE=true;;
+        esac
+        shift
+    done
+
+    local FILECONF=$(config_getFilenameModule ${OLIX_MODULE_NAME})
+
+    # Test si la configuration existe
+    logger_info "Test si la configuration est déjà effectuée"
+    if [[ -f ${FILECONF} ]] && [[ ${FORCE} == false ]] ; then
+        logger_warning "Le fichier de configuration existe déjà"
+        if [[ ${OLIX_OPTION_VERBOSE} == true ]]; then
+            echo "----------"
+            cat ${FILECONF}
+            echo "----------"
+        fi
+        echo "Pour reinitialiser la configuration, utiliser : ${OLIX_CORE_SHELL_NAME} mysql init -f|--force"
+        core_exit 0
+    fi
+
+    # Test si c'est le propriétaire
+    logger_info "Test si c'est le propriétaire"
+    core_checkIfOwner
+    [[ $? -ne 0 ]] && logger_error "Seul l'utilisateur \"$(core_getOwner)\" peut exécuter ce script"
+
+    if [[ -f ${FILECONF} ]]; then
+        logger_info "Chargement du fichier de configuration ${FILECONF}"
+        source ${FILECONF}
+    fi
+
+    olixmod_init $@
+}
+
+
+###
 # Retourne le nom du script a executer
 # @param $1 : Nom du module
 ##
 function module_getScript()
 {
-    echo -n "${OLIX_ROOT}/${OLIX_MODULE_DIR}/$1/$1.sh"
+    echo -n "${OLIX_ROOT}/${OLIX_MODULE_DIR}/$1/olixmod.sh"
 }
 
 

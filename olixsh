@@ -101,12 +101,11 @@ core_checkInstall ${OLIX_ARGS}
 
 if command_isExist ${OLIX_ARGS}; then
     command_execute ${OLIX_ARGS}
-else if module_isInstalled ${OLIX_ARGS}; then
+elif module_isInstalled ${OLIX_ARGS}; then
     module_execute ${OLIX_ARGS}
 else
     stdout_printNoCommandNoModule ${OLIX_ARGS}
     stdout_printUsage
-fi
 fi
 
 

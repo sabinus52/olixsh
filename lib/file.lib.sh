@@ -81,7 +81,7 @@ function file_purgeStandard()
    [[ -z $4 ]] && FREDIRECT="/dev/null" || FREDIRECT=$4
    logger_debug "file_purgeStandard ($1, $2, $3, $FREDIRECT)"
     #find $1 -name "$2*" -mtime +$3 -fprintf ${FREDIRECT} "%f\n" -delete > /dev/null 2> ${OLIX_LOGGER_FILE_ERR}
-    find $1 -name "$2*" -mtime +$3 -printf "%f\n" -delete |sort > ${FREDIRECT} 2> ${OLIX_LOGGER_FILE_ERR}
+    find $1 -maxdepth 1 -name "$2*" -mtime +$3 -printf "%f\n" -delete |sort > ${FREDIRECT} 2> ${OLIX_LOGGER_FILE_ERR}
     return $?
 }
 
@@ -105,21 +105,21 @@ function file_purgeLogarithmic() {
     for (( I=1 ; I<=12 ; I++ )); do
         FILE=$2$(date --date "$I months ago" +%Y-%m)-01
         #find $1 -name $FILE* 2> /dev/null
-        find $1 -name $FILE* -exec touch \{\} \; 2> /dev/null
+        find $1 -maxdepth 1 -name $FILE* -exec touch \{\} \; 2> /dev/null
     done
     for (( I=1 ; I<=60 ; I++ )); do
         if [ $(date --date "$I days ago" +%u) -eq 3 ]; then
             FILE=$2$(date --date "$I days ago" +%F)
             #find $1 -name $FILE* 2> /dev/null
-            find $1 -name $FILE* -exec touch \{\} \; 2> /dev/null
+            find $1 -maxdepth 1 -name $FILE* -exec touch \{\} \; 2> /dev/null
         fi
     done
     for (( I=1 ; I<=7 ; I++ )); do
         FILE=$2$(date --date "$I days ago" +%F)
         #find $1 -name $FILE* 2> /dev/null
-        find $1 -name $FILE* -exec touch \{\} \; 2> /dev/null
+        find $1 -maxdepth 1 -name $FILE* -exec touch \{\} \; 2> /dev/null
     done
     #find $1 -name "$2*" -mtime +0 -fprintf ${FREDIRECT} "%f\n" -delete > /dev/null 2> ${OLIX_LOGGER_FILE_ERR}
-    find $1 -name "$2*" -mtime +0 -printf "%f\n" -delete |sort > ${FREDIRECT} 2> ${OLIX_LOGGER_FILE_ERR}
+    find $1 -maxdepth 1 -name "$2*" -mtime +0 -printf "%f\n" -delete |sort > ${FREDIRECT} 2> ${OLIX_LOGGER_FILE_ERR}
     return $?
 }
