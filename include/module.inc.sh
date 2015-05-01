@@ -12,6 +12,8 @@ OLIX_MODULE_REPOSITORY="conf/modules.lst"
 # Emplacement des modules installés
 OLIX_MODULE_DIR="modules"
 
+# Fichier de conf utilisé par le module
+OLIX_MODULE_FILECONF=""
 
 
 ###
@@ -84,6 +86,8 @@ function module_execute()
     if module_isInstalled "$1"; then
         source ${SCRIPT}
         shift
+        OLIX_MODULE_FILECONF=$(config_getFilenameModule ${OLIX_MODULE_NAME})
+
         if [[ ${OLIX_OPTION_LIST} == true ]]; then
             # Pour afficher des listes simple utile pour la complétion
             olixmod_list $@
@@ -116,18 +120,16 @@ function module_initialize()
         shift
     done
 
-    local FILECONF=$(config_getFilenameModule ${OLIX_MODULE_NAME})
-
     # Test si la configuration existe
     logger_info "Test si la configuration est déjà effectuée"
-    if [[ -f ${FILECONF} ]] && [[ ${FORCE} == false ]] ; then
+    if config_isModuleExist ${OLIX_MODULE_NAME} && [[ ${FORCE} == false ]] ; then
         logger_warning "Le fichier de configuration existe déjà"
         if [[ ${OLIX_OPTION_VERBOSE} == true ]]; then
             echo "----------"
-            cat ${FILECONF}
+            cat ${OLIX_MODULE_FILECONF}
             echo "----------"
         fi
-        echo "Pour reinitialiser la configuration, utiliser : ${OLIX_CORE_SHELL_NAME} mysql init -f|--force"
+        echo "Pour reinitialiser la configuration du module, utiliser : ${OLIX_CORE_SHELL_NAME} ${OLIX_MODULE_NAME} init -f|--force"
         core_exit 0
     fi
 
@@ -136,9 +138,9 @@ function module_initialize()
     core_checkIfOwner
     [[ $? -ne 0 ]] && logger_error "Seul l'utilisateur \"$(core_getOwner)\" peut exécuter ce script"
 
-    if [[ -f ${FILECONF} ]]; then
-        logger_info "Chargement du fichier de configuration ${FILECONF}"
-        source ${FILECONF}
+    if config_isModuleExist ${OLIX_MODULE_NAME}; then
+        logger_info "Chargement du fichier de configuration ${OLIX_MODULE_FILECONF}"
+        source ${OLIX_MODULE_FILECONF}
     fi
 
     olixmod_init $@
