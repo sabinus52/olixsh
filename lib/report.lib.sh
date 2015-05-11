@@ -15,24 +15,32 @@ OLIX_REPORT_EMAIL=""
 ###
 # Initialise le rapport
 # @param $1 : Type du rapport texte ou html
-# @param $2 : Chemin + nom du fichier du rapport
-# @param $3 : Email sur lequel sera envoyé le rapport
+# @param $2 : Chemin du fichier du rapport
+# @param $3 : Nom du fichier de rapport
+# @param $4 : Email sur lequel sera envoyé le rapport
 ##
 function report_initialize()
 {
-    logger_debug "report_initialize ($1, $2, $3)"
+    logger_debug "report_initialize ($1, $2, $3, $4)"
+
+    # Test du dossier
+    local DIR=$2
+    if [[ ! -d $2 ]]; then
+        logger_warning "Le dossier '$2' n'existe pas utilisation de /tmp"
+        DIR="/tmp"
+    fi
 
     case $1 in
         HTML|html)  source lib/report.html.lib.sh
-                    OLIX_REPORT_FILENAME="$2.html";;        
+                    OLIX_REPORT_FILENAME="$DIR/$3.html";;
         TEXT|text)  source lib/report.text.lib.sh
-                    OLIX_REPORT_FILENAME="$2.txt";;
+                    OLIX_REPORT_FILENAME="$DIR/$3.txt";;
         *)          logger_warning "Type de rapport non défini"
                     return;;
     esac
 
     OLIX_REPORT_FORMAT=$1
-    OLIX_REPORT_EMAIL=$3
+    OLIX_REPORT_EMAIL=$4
 
     echo > ${OLIX_REPORT_FILENAME}
     report_printHeader
