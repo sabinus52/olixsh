@@ -95,9 +95,9 @@ function logger_print()
 
     case "${LEVEL}" in
         debug)      echo -e "${CGRIS}${MESSAGE}${CVOID}" >&2;;
-        info)       echo -e "${Ccyan}${MESSAGE}${CVOID}";;
-        warning)    echo -e "${Cjaune}${MESSAGE}${CVOID}";;
-        error)      echo -e "${Crouge}${MESSAGE}${CVOID}";;
+        info)       echo -e "${Ccyan}${MESSAGE}${CVOID}" >&2;;
+        warning)    echo -e "${Cjaune}${MESSAGE}${CVOID}" >&2;;
+        error)      echo -e "${Crouge}${MESSAGE}${CVOID}" >&2;;
     esac
 }
 
