@@ -51,22 +51,32 @@ function filesystem_getSizeFileHuman()
 
 
 ###
-# Extrait une archive dans un emplacement désiré
-# @param $1 : Nom du fichier
-# @param $2 : Emplacement
-# @param $3 : Paramètre supplémentaire
-# @return   : Nom du fichier compressé
+# Copie un fichier de configuration dans son emplacement
+# @param $1 : Fichier de configuration à lier
+# @param $2 : Lien de destination
 ##
-function filesystem_extractTAR()
+function filesystem_copyFileConfiguration()
 {
-    logger_debug "filesystem_unpackTAR ($1, $2, $3)"
-    local OPTS=""
+    logger_debug "filesystem_copyFileConfiguration ($1, $2)"
+    [[ ! -f $1 ]] && logger_error "Le fichier '$1' n'existe pas"
+    logger_debug "cp $1 $2"
+    cp $1 $2 > ${OLIX_LOGGER_FILE_ERR} 2>&1
+    [[ $? -ne 0 ]] && logger_error
+    return 0
+}
 
-    [[ ${OLIX_OPTION_VERBOSE} == true ]] && OPTS="${OPTS} --verbose"
-    [[ -n $3 ]] && OPTS="${OPTS} $3"
-    logger_info "Extraction de $1 vers $2"
-    logger_debug "tar --extract ${OPTS} --file=$1 --directory=$2"
 
-    tar --extract ${OPTS} --file=$1 --directory=$2 2> ${OLIX_LOGGER_FILE_ERR}
-    return $?
+###
+# Crée un lien avec mon fichier de configuration
+# @param $1 : Fichier de configuration à lier
+# @param $2 : Lien de destination
+##
+function filesystem_linkNodeConfiguration()
+{
+    logger_debug "filesystem_linkNodeConfiguration ($1, $2)"
+    [[ ! -f $1 ]] && logger_error "Le fichier '$1' n'existe pas"
+    logger_debug "ln -sf $(readlink -f $1) $2"
+    ln -sf $(readlink -f $1) $2 > ${OLIX_LOGGER_FILE_ERR} 2>&1
+    [[ $? -ne 0 ]] && logger_error
+    return 0
 }
