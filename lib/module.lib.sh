@@ -69,7 +69,7 @@ function module_installCompletion()
 function module_removeCompletion()
 {
     logger_debug "module_removeCompletion ($1)"
-    if [[ -L completion/$1 ]] || [[ -f completion/$1 ]]; then
+    if [[ -L completion/$1 || -f completion/$1 ]]; then
         logger_info "Suppression du fichier de completion"
         rm -f completion/$1 > ${OLIX_LOGGER_FILE_ERR} 2>&1
         return $?

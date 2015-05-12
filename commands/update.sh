@@ -14,7 +14,7 @@ OLIX_COMMAND_NAME="update"
 ##
 source lib/module.lib.sh
 source lib/system.lib.sh
-source lib/filesystem.lib.sh
+source lib/file.lib.sh
 
 
 
@@ -68,6 +68,45 @@ olixcmd_main()
 
     case ${MODULE} in
         olix) olixcmd__olixsh;;
-        *)    olixcmd__module $1;;
+        *)    command_update_module $1;;
     esac
+}
+
+
+###
+# Mise à jour du module
+# @param $1 : Nom du module
+##
+function command_update_module()
+{
+    logger_debug "command_update_module ($1)"
+
+    # Test si c'est le propriétaire
+    logger_info "Test si c'est le propriétaire"
+    core_checkIfOwner
+    [[ $? -ne 0 ]] && logger_error "Seul l'utilisateur \"$(core_getOwner)\" peut exécuter ce script"
+    
+    logger_info "Vérification du module $1"
+    if ! $(module_isExist $1); then
+        logger_warning "Le module '$1' est inéxistant"
+        exit 1
+    fi
+
+    logger_info "Vérification si le module est installé"
+    if ! $(module_isInstalled $1); then
+        logger_warning "Le module '$1' n'est pas installé"
+        exit 1
+    fi
+
+    module_download $1
+    [[ $? -ne 0 ]] && logger_error "Impossible de télécharger le module $1"
+    
+    module_removeDirModule $1
+    module_deploy $1
+    [[ $? -ne 0 ]] && logger_error "Impossible de déployer le module $1"
+
+    module_installCompletion $1
+    [[ $? -ne 0 ]] && logger_error "Impossible de déployer le fichier de completion du module $1"
+
+    echo -e "${CVERT}L'installation s'est terminé avec succès${CVOID}"
 }
