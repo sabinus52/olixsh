@@ -94,27 +94,19 @@ function command_install_module()
     logger_info "Vérification du module $1"
     if ! $(module_isExist $1); then
         logger_warning "Le module '$1' est inéxistant"
-        exit 1
+        core_exit 1
     fi
 
     logger_info "Vérification si le module est installé"
     if $(module_isInstalled $1); then
         logger_warning "Le module '$1' est déjà installé"
-        exit 1
+        stdout_print "Essayer : ${CBLANC}$(basename ${OLIX_ROOT_SCRIPT}) update $1${CVOID} pour mettre à jour"
+        core_exit 1
     fi
 
-    module_download $1
-    [[ $? -ne 0 ]] && logger_error "Impossible de télécharger le module $1"
-    
-    module_deploy $1
-    [[ $? -ne 0 ]] && logger_error "Impossible de déployer le module $1"
+    module_install $1
 
-    module_installCompletion $1
-    [[ $? -ne 0 ]] && logger_error "Impossible de déployer le fichier de completion du module $1"
-
-    module_execute $1 "init"
-
-    echo -e "${CVERT}L'installation s'est terminé avec succès${CVOID}"
+    echo -e "${CVERT}L'installation du module ${CCYAN}$1${CVERT} s'est terminé avec succès${CVOID}"
 }
 
 

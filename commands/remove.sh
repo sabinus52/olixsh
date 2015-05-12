@@ -82,13 +82,13 @@ function command_remove_module()
     logger_info "Vérification du module $1"
     if ! $(module_isExist $1); then
         logger_warning "Le module '$1' est inéxistant"
-        exit 1
+        core_exit 1
     fi
 
     logger_info "Vérification si le module est installé"
     if ! $(module_isInstalled $1); then
         logger_warning "Le module '$1' n'est pas installé"
-        exit 1
+        core_exit 1
     fi
 
     module_removeCompletion $1
@@ -100,5 +100,5 @@ function command_remove_module()
     module_removeDirModule $1
     [[ $? -ne 0 ]] && logger_error "Impossible de supprimer le module $1"
 
-    echo -e "${CVERT}L'installation s'est terminé avec succès${CVOID}"
+    echo -e "${CVERT}La suppression du module ${CCYAN}$1${CVERT} s'est terminé avec succès${CVOID}"
 }

@@ -178,6 +178,7 @@ function module_initialize()
 {
     logger_debug "module_initialize ($@)"
     source lib/stdin.lib.sh
+    OLIX_MODULE_FILECONF=$(config_getFilenameModule ${OLIX_MODULE_NAME})
 
     local FORCE=false
     while [[ $# -ge 1 ]]; do

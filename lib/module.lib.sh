@@ -6,6 +6,54 @@
 ##
 
 
+###
+# Installation complète du module
+# @param $1 : Nom du module
+##
+function module_install()
+{
+    logger_debug "module_install ($1)"
+    local UPDATE=false
+
+    logger_info "Vérification du module $1"
+    if ! $(module_isExist $1); then
+        logger_warning "Le module '$1' est inéxistant"
+        return 1
+    fi
+
+    logger_info "Vérification si le module est installé"
+    if $(module_isInstalled $1); then
+        logger_warning "Le module '$1' est déjà installé"
+        module_removeDirModule $1
+        UPDATE=true
+        stdout_print "Mise à jour du module ${CCYAN}$1" "${CBLANC}"
+    else
+        stdout_print "Installation du module ${CCYAN}$1" "${CBLANC}"
+    fi
+
+    # Traitement
+    module_download $1
+    [[ $? -ne 0 ]] && logger_error "Impossible de télécharger le module $1"
+    module_deploy $1
+    [[ $? -ne 0 ]] && logger_error "Impossible de déployer le module $1"
+    module_installCompletion $1
+    [[ $? -ne 0 ]] && logger_error "Impossible de déployer le fichier de completion du module $1"
+
+    source $(module_getScript "$1")
+    if [[ ${UPDATE} == false ]]; then
+        stdout_print "Saisie des éléments de configuration du module ${CCYAN}$1" "${CBLANC}"
+        module_initialize
+    fi
+    BINARIES="${BINARIES} $(olixmod_require_binary)"
+
+    # Dépendances
+    for I in $(olixmod_require_module); do
+        module_install $I
+    done
+
+    system_whichBinaries "${BINARIES}"
+}
+
 
 ###
 # Télécharge le module
@@ -20,7 +68,7 @@ function module_download()
 
     local OPTS="--tries=3 --timeout=30 --no-check-certificate"
     [[ ${OLIX_OPTION_VERBOSEDEBUG} == true ]] && OPTS="${OPTS} --debug"
-    [[ ${OLIX_OPTION_VERBOSE} == true ]] && OPTS="${OPTS} --verbose"
+    [[ ${OLIX_OPTION_VERBOSE} == false ]] && OPTS="${OPTS} --quiet"
     OPTS="${OPTS} --output-document=/tmp/olixmodule.tar.gz"
     logger_debug "wget ${OPTS} ${URL}"
 
@@ -40,8 +88,9 @@ function module_deploy()
     file_extractArchive "/tmp/olixmodule.tar.gz" "${OLIX_ROOT}/${OLIX_MODULE_DIR}" "--gzip"
     [[ $? -ne 0 ]] && return 1
 
-    logger_info "Renommage de 'olixshmodule-$1' vers '$1'"
-    mv ${OLIX_ROOT}/${OLIX_MODULE_DIR}/olixshmodule-$1* ${OLIX_ROOT}/${OLIX_MODULE_DIR}/$1 > ${OLIX_LOGGER_FILE_ERR} 2>&1
+    local DIRTAR=$(tar -tf /tmp/olixmodule.tar.gz | grep -o '^[^/]\+' | sort -u)
+    logger_info "Renommage de '${DIRTAR}' vers '$1'"
+    mv ${OLIX_ROOT}/${OLIX_MODULE_DIR}/${DIRTAR} ${OLIX_ROOT}/${OLIX_MODULE_DIR}/$1 > ${OLIX_LOGGER_FILE_ERR} 2>&1
     [[ $? -ne 0 ]] && return 1
     return 0
 }
