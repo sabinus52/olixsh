@@ -66,11 +66,12 @@ function module_getScript()
 function module_isExist()
 {
     logger_debug "module_isExist ($1)"
-    local RESULT MODULE URL LABEL
+    local RESULT
     RESULT=$(grep "^$1|" ${OLIX_MODULE_REPOSITORY_USER})
-    [[ $? -ne 0 ]] && RESULT=$(grep "^$1|" ${OLIX_MODULE_REPOSITORY})
-    [[ $? -ne 0 ]] && return 1
-    return 0
+    [[ $? -eq 0 ]] && return 0
+    RESULT=$(grep "^$1|" ${OLIX_MODULE_REPOSITORY})
+    [[ $? -eq 0 ]] && return 0
+    return 1
 }
 
 

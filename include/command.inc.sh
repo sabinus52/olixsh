@@ -7,7 +7,7 @@
 
 
 
-OLIX_COMMAND_LIST="install update"
+OLIX_COMMAND_LIST="install update remove"
 
 
 ###
@@ -18,6 +18,7 @@ function command_printList()
     logger_debug "command_printList ()"
     echo -e "${Cjaune} install ${CVOID}     : Installation des modules oliXsh"
     echo -e "${Cjaune} update  ${CVOID}     : Mise à jour des modules oliXsh "
+    echo -e "${Cjaune} remove  ${CVOID}     : Suppression d'un module oliXsh "
 }
 
 

@@ -6,7 +6,7 @@ _olixsh()
     prev="${COMP_WORDS[COMP_CWORD-1]}"
     prev2="${COMP_WORDS[COMP_CWORD-2]}"
     opts="--help --debug --verbose --no-warnings --version"
-    cmds="install update"
+    cmds="install update remove"
     mods=$(${OLIX_ROOT_COMP}/olixsh update --list)
 
     case "${prev2}" in
@@ -28,6 +28,10 @@ _olixsh()
             ;;
         update)
             COMPREPLY=( $(compgen -W "cfg1 cf2" -- ${cur}) )
+            return 0
+            ;;
+        remove)
+            COMPREPLY=( $(compgen -W "$(${OLIX_ROOT_COMP}/olixsh remove --list)" -- ${cur}) )
             return 0
             ;;
         *)

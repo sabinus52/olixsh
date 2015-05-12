@@ -69,7 +69,40 @@ function module_installCompletion()
 function module_removeCompletion()
 {
     logger_debug "module_removeCompletion ($1)"
-    [[ -L completion/$1 ]] && logger_info "Suppression du fichier de completion" && rm -f completion/$1 > ${OLIX_LOGGER_FILE_ERR} 2>&1
-    [[ -f completion/$1 ]] && logger_info "Suppression du fichier de completion" && rm -f completion/$1 > ${OLIX_LOGGER_FILE_ERR} 2>&1
+    if [[ -L completion/$1 ]] || [[ -f completion/$1 ]]; then
+        logger_info "Suppression du fichier de completion"
+        rm -f completion/$1 > ${OLIX_LOGGER_FILE_ERR} 2>&1
+        return $?
+    fi
+    return 0
+}
+
+
+###
+# Supprime le fichier de configuration
+# @param $1 : Nom du module
+##
+function module_removeFileConfiguration()
+{
+    logger_debug "module_removeFileConfiguration ($1)"
+    local FILE=$(config_getFilenameModule $1)
+    if [[ -f ${FILE} ]]; then
+        logger_info "Suppression du fichier de configuration"
+        rm -f ${FILE} > ${OLIX_LOGGER_FILE_ERR} 2>&1
+        return $?
+    fi
+    return 0
+}
+
+
+###
+# Supprime le dossier du module
+# @param $1 : Nom du module
+##
+function module_removeDirModule()
+{
+    logger_debug "module_removeDirModule ($1)"
+    logger_info "Suppression du dossier du module"
+    rm -rf modules/$1 > ${OLIX_LOGGER_FILE_ERR} 2>&1
     return $?
 }
