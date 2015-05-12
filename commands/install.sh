@@ -14,7 +14,7 @@ OLIX_COMMAND_NAME="install"
 ##
 source lib/module.lib.sh
 source lib/system.lib.sh
-source lib/filesystem.lib.sh
+source lib/file.lib.sh
 
 
 ###
@@ -33,7 +33,7 @@ olixcmd_usage()
     echo
     echo -e "Installation des modules oliXsh"
     echo
-    echo -e "${CBLANC} Usage : ${CVIOLET}$(basename ${OLIX_ROOT_SCRIPT}) ${CVERT}install ${CJAUNE}[MODULE]${CVOID}"
+    echo -e "${CBLANC} Usage : ${CVIOLET}$(basename ${OLIX_ROOT_SCRIPT}) ${CVERT}install ${CJAUNE}module${CVOID}"
     echo
     echo -e "${CJAUNE}Liste des MODULES disponibles${CVOID} :"
     echo -e "${Cjaune} olix ${CVOID}        : Installation de oliXsh sur le système"
@@ -73,7 +73,7 @@ olixcmd_main()
 
     case ${MODULE} in
         olix) olixcmd__olixsh;;
-        *)    olixcmd__module $1;;
+        *)    command_install_module $1;;
     esac
 }
 
@@ -82,9 +82,9 @@ olixcmd_main()
 # Installation du module
 # @param $1 : Nom du module
 ##
-function olixcmd__module()
+function command_install_module()
 {
-    logger_debug "command_install__olixcmd__olixsh ($1)"
+    logger_debug "command_install_module ($1)"
 
     # Test si c'est le propriétaire
     logger_info "Test si c'est le propriétaire"
@@ -103,12 +103,18 @@ function olixcmd__module()
         exit 1
     fi
 
-    logger_info "Téléchargement du module"
     module_download $1
     [[ $? -ne 0 ]] && logger_error "Impossible de télécharger le module $1"
     
     module_deploy $1
     [[ $? -ne 0 ]] && logger_error "Impossible de déployer le module $1"
+
+    module_installCompletion $1
+    [[ $? -ne 0 ]] && logger_error "Impossible de déployer le fichier de completion du module $1"
+
+    module_execute $1 "init"
+
+    echo -e "${CVERT}L'installation s'est terminé avec succès${CVOID}"
 }
 
 
