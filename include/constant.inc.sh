@@ -7,12 +7,9 @@
 
 
 ###
-# Paramètres système NON modifiable
+# Paramètres du coeur
 ##
-
-
-# Fichier de config systeme contenant les informations sur l'emplacement de la configuration
-OLIX_CONFIG_FILE="/etc/olix"
+OLIX_CORE_GITURL="http://172.16.34.123/olixsh.tar.gz"
 
 
 ###

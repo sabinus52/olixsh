@@ -72,7 +72,7 @@ olixcmd_main()
     [[ "$1" == "help" ]] && olixcmd_usage && core_exit 0
 
     case ${MODULE} in
-        olix) olixcmd__olixsh;;
+        olix) command_install_olixsh;;
         *)    command_install_module $1;;
     esac
 }
@@ -113,9 +113,9 @@ function command_install_module()
 ###
 # Installation de Olix dans le système
 ##
-function olixcmd__olixsh()
+function command_install_olixsh()
 {
-    logger_debug "command_install__olixcmd__olixsh ()"
+    logger_debug "command_install_olixsh ()"
 
     # Fore l'activation des warnings
     OLIX_OPTION_WARNINGS=true
@@ -132,8 +132,8 @@ function olixcmd__olixsh()
     system_whichBinaries "${OLIX_BINARIES_REQUIRED}"
     [[ $? -ne 0 ]] && echo && logger_warning "ATTENTION !!! Ces binaires sont requis pour le bon fonctionnement de oliXsh" && echo
 
-    olixcmd__createLinkShell
-    olixcmd__createFileCompletion
+    command_install_olixsh_createLinkShell
+    command_install_olixsh_createFileCompletion
 
     echo -e "${CVERT}L'installation s'est terminé avec succès${CVOID}"
 }
@@ -142,9 +142,9 @@ function olixcmd__olixsh()
 ###
 # Effectue un lien vers l'interpréteur olixsh depuis /bin/olixsh pour l'installation
 ##
-function olixcmd__createLinkShell()
+function command_install_olixsh_createLinkShell()
 {
-    logger_debug "olixcmd__createLinkShell ()"
+    logger_debug "command_install_olixsh_createLinkShell ()"
     logger_info "Création du lien ${OLIX_CORE_SHELL_LINK}"
     ln -sf $(pwd)/${OLIX_CORE_SHELL_NAME} ${OLIX_CORE_SHELL_LINK} > ${OLIX_LOGGER_FILE_ERR} 2>&1
     [[ $? -ne 0 ]] && logger_error "Impossible de créer le lien ${OLIX_CORE_SHELL_LINK}"
@@ -154,9 +154,9 @@ function olixcmd__createLinkShell()
 ###
 # Créer le fichier de la completion
 ##
-function olixcmd__createFileCompletion()
+function command_install_olixsh_createFileCompletion()
 {
-    logger_debug "olixcmd__createFileCompletion ()"
+    logger_debug "command_install_olixsh_createFileCompletion ()"
     logger_info "Création du fichier ${OLIX_COMMAND_COMPLETION}"
     if [[ -d $(dirname ${OLIX_COMMAND_COMPLETION}) ]]; then
 
@@ -166,7 +166,6 @@ if [[ -r $(pwd)/completion/olixmain ]]; then
     source $(pwd)/completion/olixmain
 fi
 EOT
-
         [[ $? -ne 0 ]] && logger_warning "Impossible de créer le fichier ${OLIX_COMMAND_COMPLETION}" && logger_warning "La completion ne sera pas active !"
     else
         logger_warning "Apparement aucune completion n'a été trouvée !"

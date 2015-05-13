@@ -27,7 +27,7 @@ _olixsh()
             return 0
             ;;
         update)
-            COMPREPLY=( $(compgen -W "cfg1 cf2" -- ${cur}) )
+            COMPREPLY=( $(compgen -W "$(${OLIX_ROOT_COMP}/olixsh update --list --with-olix)" -- ${cur}) )
             return 0
             ;;
         remove)
