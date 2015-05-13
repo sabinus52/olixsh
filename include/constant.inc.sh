@@ -9,7 +9,37 @@
 ###
 # Paramètres du coeur
 ##
-OLIX_CORE_GITURL="http://172.16.34.123/olixsh.tar.gz"
+OLIX_CORE_GITURL="https://github.com/sabinus52/olixsh/archive/0.1.tar.gz"
+# Nom du fichier de l'interpréteur
+OLIX_CORE_SHELL_NAME="olixsh"
+# Lien vers l'interpréteur olixsh
+OLIX_CORE_SHELL_LINK="/usr/bin/olixsh"
+
+
+###
+# Dossiers
+##
+# Emplacement de la configuration
+OLIX_CONFIG_DIR="conf"
+# Emplacement des modules installés
+OLIX_MODULE_DIR="modules"
+
+
+###
+# Commandes
+##
+OLIX_COMMAND_LIST="install update remove"
+
+
+###
+# Modules
+##
+# Emplacement du fichier contenant la liste des modules existants
+OLIX_MODULE_REPOSITORY="conf/modules.lst"
+# Emplacement du fichier contenant la liste des modules utilisateurs
+OLIX_MODULE_REPOSITORY_USER="conf/mymodules.lst"
+# Fichier de conf utilisé par le module
+OLIX_MODULE_FILECONF=""
 
 
 ###

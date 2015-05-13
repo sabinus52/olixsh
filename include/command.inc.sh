@@ -7,9 +7,6 @@
 
 
 
-OLIX_COMMAND_LIST="install update remove"
-
-
 ###
 # Affiche le menu des commands
 ##

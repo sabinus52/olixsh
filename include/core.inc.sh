@@ -9,11 +9,6 @@
 # Pointeur de temps de départ du script
 OLIX_CORE_EXEC_START=${SECONDS}
 
-# Nom du fichier de l'interpréteur
-OLIX_CORE_SHELL_NAME="olixsh"
-# Lien vers l'interpréteur olixsh
-OLIX_CORE_SHELL_LINK="/usr/bin/otestsh"
-
 
 ###
 # Sortie du programme shell avec nettoyage

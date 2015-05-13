@@ -56,4 +56,4 @@ _olixsh()
     esac
 }
 
-complete -F _olixsh otestsh
+#complete -F _olixsh otestsh

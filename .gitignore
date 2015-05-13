@@ -1,2 +1,6 @@
+/conf/*
+!/conf/modules.lst
+/completion/*
+!/completion/olixmain
 /modules/*
 !/modules/empty

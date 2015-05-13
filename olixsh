@@ -87,6 +87,7 @@ while [[ $# -ge 1 ]]; do
 done
 
 logger_info "Version : ${OLIX_VERSION}"
+logger_debug "OLIX_ROOT=${OLIX_ROOT}"
 logger_debug "OLIX_ARGS=${OLIX_ARGS}"
 
 

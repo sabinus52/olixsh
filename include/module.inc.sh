@@ -6,18 +6,6 @@
 ##
 
 
-# Emplacement du fichier contenant la liste des modules existants
-OLIX_MODULE_REPOSITORY="conf/modules.lst"
-
-# Emplacement du fichier contenant la liste des modules utilisateurs
-OLIX_MODULE_REPOSITORY_USER="conf/mymodules.lst"
-
-# Emplacement des modules installés
-OLIX_MODULE_DIR="modules"
-
-# Fichier de conf utilisé par le module
-OLIX_MODULE_FILECONF=""
-
 
 ###
 # Affiche la liste des modules disponibles

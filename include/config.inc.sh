@@ -6,8 +6,6 @@
 ##
 
 
-OLIX_CONFIG_DIR="conf"
-
 
 ###
 # Vérifie que la valeur de la configuration n'est pas vide

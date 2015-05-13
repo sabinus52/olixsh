@@ -164,6 +164,7 @@ cat > ${OLIX_COMMAND_COMPLETION} <<EOT
 OLIX_ROOT_COMP=$(pwd)
 if [[ -r $(pwd)/completion/olixmain ]]; then
     source $(pwd)/completion/olixmain
+    complete -F _olixsh olixsh
 fi
 EOT
         [[ $? -ne 0 ]] && logger_warning "Impossible de créer le fichier ${OLIX_COMMAND_COMPLETION}" && logger_warning "La completion ne sera pas active !"
