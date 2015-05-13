@@ -1,56 +1,64 @@
+###
+# Completion du script OliXsh
+# ==============================================================================
+# @package olixsh
+# @author Olivier <sabinus52@gmail.com>
+##
+
 _olixsh() 
 {
-    local cur prev opts opts2 prev2 mods
+    local I CUR PREV FIRST 
+    local LST_OPTS LST_CMDS LST_MODS
     COMPREPLY=()
-    cur="${COMP_WORDS[COMP_CWORD]}"
-    prev="${COMP_WORDS[COMP_CWORD-1]}"
-    prev2="${COMP_WORDS[COMP_CWORD-2]}"
-    opts="--help --debug --verbose --no-warnings --version"
-    cmds="install update remove"
-    mods=$(${OLIX_ROOT_COMP}/olixsh update --list)
+    CUR="${COMP_WORDS[COMP_CWORD]}"
+    PREV="${COMP_WORDS[COMP_CWORD-1]}"
+    FIRST=
+    LST_OPTS="--help --debug --verbose --no-warnings --version"
+    LST_CMDS="install update remove"
+    LST_MODS=$(${OLIX_ROOT_COMP}/olixsh update --list)
 
-    case "${prev2}" in
-        *)
-            if [[ ${mods} =~ (^|[[:space:]])"${prev2}"($|[[:space:]]) ]] ; then
-                if [[ -r ${OLIX_ROOT_COMP}/completion/${prev2} ]]; then
-                    source ${OLIX_ROOT_COMP}/completion/${prev2}
+    # Recherche quel est le module ou la commande utilisé
+    for I in ${COMP_WORDS[*]}; do
+        [[ -n ${FIRST} ]] && break
+        if [[ ${LST_CMDS} =~ (^|[[:space:]])"${I}"($|[[:space:]]) ]] ; then
+            FIRST=${I}
+        elif [[ ${LST_MODS} =~ (^|[[:space:]])"${I}"($|[[:space:]]) ]]; then
+            FIRST=${I}
+        fi
+    done
+
+    # Si commande ou module trouvé alors on propose la completion lié à cette commande
+    if [[ -n ${FIRST} ]]; then
+        case "${FIRST}" in
+            install)
+                [[ ${PREV} != ${FIRST} ]] && return 0
+                COMPREPLY=( $(compgen -W "$(${OLIX_ROOT_COMP}/olixsh install --list --with-olix)" -- ${CUR}) )
+                ;;
+            update)
+                [[ ${PREV} != ${FIRST} ]] && return 0
+                COMPREPLY=( $(compgen -W "$(${OLIX_ROOT_COMP}/olixsh update --list --with-olix)" -- ${CUR}) )
+                ;;
+            remove)
+                [[ ${PREV} != ${FIRST} ]] && return 0
+                COMPREPLY=( $(compgen -W "$(${OLIX_ROOT_COMP}/olixsh remove --list)" -- ${CUR}) )
+                ;;
+            *)
+                if [[ -r ${OLIX_ROOT_COMP}/completion/${FIRST} ]]; then
+                    source ${OLIX_ROOT_COMP}/completion/${FIRST}
                     _olixsh_module
-                    return 0
                 fi
-            fi
-            ;;
-    esac
-
-    case "${prev}" in
-        install)
-            COMPREPLY=( $(compgen -W "$(${OLIX_ROOT_COMP}/olixsh install --list --with-olix)" -- ${cur}) )
-            return 0
-            ;;
-        update)
-            COMPREPLY=( $(compgen -W "$(${OLIX_ROOT_COMP}/olixsh update --list --with-olix)" -- ${cur}) )
-            return 0
-            ;;
-        remove)
-            COMPREPLY=( $(compgen -W "$(${OLIX_ROOT_COMP}/olixsh remove --list)" -- ${cur}) )
-            return 0
-            ;;
-        *)
-            if [[ ${mods} =~ (^|[[:space:]])"${prev}"($|[[:space:]]) ]] ; then
-                if [[ -r ${OLIX_ROOT_COMP}/completion/${prev} ]]; then
-                    source ${OLIX_ROOT_COMP}/completion/${prev}
-                    _olixsh_module
-                    return 0
-                fi
-            fi
-            ;;
-    esac
-
-    case "${cur}" in    
+                ;;
+        esac
+        return 0
+    fi
+    
+    # Completion si commande ou module non trouvé
+    case "${CUR}" in    
         -*)
-            COMPREPLY=( $(compgen -W "${opts}" -- ${cur}) )
+            COMPREPLY=( $(compgen -W "${LST_OPTS}" -- ${CUR}) )
             return 0
             ;;
-        *)  COMPREPLY=( $(compgen -W "${cmds} ${mods}" -- ${cur}) )
+        *)  COMPREPLY=( $(compgen -W "${LST_CMDS} ${LST_MODS}" -- ${CUR}) )
             return 0
             ;;
     esac
