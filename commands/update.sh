@@ -133,15 +133,17 @@ function command_update_olixsh_download()
 {
     logger_debug "command_update_olixsh_download ($1)"
 
-    logger_info "Téléchargement de la mise à jour à l'adresse ${OLIX_CORE_GITURL}"
+    local URL=$(curl -s ${OLIX_CORE_GITURL} | grep 'tarball_url' | cut -d\" -f4)
+    
+    logger_info "Téléchargement de la mise à jour à l'adresse ${URL}"
 
     local OPTS="--tries=3 --timeout=30 --no-check-certificate"
     [[ ${OLIX_OPTION_VERBOSEDEBUG} == true ]] && OPTS="${OPTS} --debug"
     [[ ${OLIX_OPTION_VERBOSE} == false ]] && OPTS="${OPTS} --quiet"
     OPTS="${OPTS} --output-document=/tmp/olixsh.tar.gz"
-    logger_debug "wget ${OPTS} ${OLIX_CORE_GITURL}"
+    logger_debug "wget ${OPTS} ${URL}"
 
-    wget ${OPTS} ${OLIX_CORE_GITURL}
+    wget ${OPTS} ${URL}
     return $?
 }
 

@@ -9,7 +9,7 @@
 ###
 # Paramètres du coeur
 ##
-OLIX_CORE_GITURL="https://github.com/sabinus52/olixsh/archive/0.1.tar.gz"
+OLIX_CORE_GITURL="https://api.github.com/repos/sabinus52/olixsh2/releases/latest"
 # Nom du fichier de l'interpréteur
 OLIX_CORE_SHELL_NAME="olixsh"
 # Lien vers l'interpréteur olixsh

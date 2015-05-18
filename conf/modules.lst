@@ -1,6 +1,6 @@
 ###
 # DON'T TOUCH
 ##
-ubuntu|https://github.com/sabinus52/olixshmodule-ubuntu/archive/0.1.tar.gz|Installation et gestion des packages Ubuntu
-mysql|https://github.com/sabinus52/olixshmodule-mysql/archive/0.1.tar.gz|Utilitaires pour les bases mysql
-appweb|https://github.com/sabinus52/olixshmodule-appweb/archive/0.1.tar.gz|Gestion des applications web
+ubuntu|github://api.github.com/repos/sabinus52/olixshmodule-ubuntu/releases/latest|Installation et gestion des packages Ubuntu
+mysql|github://api.github.com/repos/sabinus52/olixshmodule-mysql/releases/latest|Utilitaires pour les bases mysql
+appweb|github://api.github.com/repos/sabinus52/olixshmodule-appweb/releases/latest|Gestion des applications web
