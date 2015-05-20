@@ -54,11 +54,12 @@ function file_synchronize()
 # @param $1 : Nom du repertoire
 # @param $2 : Nom de l'archive
 # @param $3 : Exclusion
+# @param $4 : Autres options
 ##
 function file_makeArchive()
 {
-    logger_debug "file_makeArchive ($1, $2, $3)"
-    local PWDTMP PARAM
+    logger_debug "file_makeArchive ($1, $2, $3, $4)"
+    local PWDTMP PARAM RET
     local FILE_EXCLUDE=$(core_makeTemp)
     file_createFileExclude "${FILE_EXCLUDE}" "$3"
     
@@ -67,9 +68,12 @@ function file_makeArchive()
     [[ $? -ne 0 ]] && cd ${PWDTMP} && return 1
 
     [[ ${OLIX_OPTION_VERBOSE} == true ]] && PARAM="--verbose"
+    [[ -n $4 ]] && PARAM="${PARAM} $4"
     
+    logger_debug "tar ${PARAM} --create --file $2 --exclude-from ${FILE_EXCLUDE} ."
     tar ${PARAM} --create --file $2 --exclude-from ${FILE_EXCLUDE} . 2> ${OLIX_LOGGER_FILE_ERR}
-    [[ $? -ne 0 ]] && cd ${PWDTMP} && return 1
+    RET=$?
+    [[ ${RET} -ne 0 ]] && cd ${PWDTMP} && return ${RET}
     
     rm -f ${FILE_EXCLUDE}
     [[ $RET -ne 0 ]] && return 1
