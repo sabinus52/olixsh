@@ -3,4 +3,5 @@
 ##
 ubuntu|github://api.github.com/repos/sabinus52/olixshmodule-ubuntu/releases/latest|Installation et gestion des packages Ubuntu
 mysql|github://api.github.com/repos/sabinus52/olixshmodule-mysql/releases/latest|Utilitaires pour les bases mysql
+postgres|github://api.github.com/repos/sabinus52/olixshmodule-postgres/releases/latest|Utilitaires pour les bases postgres
 appweb|github://api.github.com/repos/sabinus52/olixshmodule-appweb/releases/latest|Gestion des applications web
