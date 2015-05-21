@@ -84,7 +84,7 @@ function command_update_module()
     # Test si c'est le propriétaire
     logger_info "Test si c'est le propriétaire"
     core_checkIfOwner
-    [[ $? -ne 0 ]] && logger_error "Seul l'utilisateur \"$(core_getOwner)\" peut exécuter ce script"
+    [[ $? -ne 0 ]] && logger_critical "Seul l'utilisateur \"$(core_getOwner)\" peut exécuter ce script"
     
     logger_info "Vérification du module $1"
     if ! $(module_isExist $1); then
@@ -115,12 +115,12 @@ function command_update_olixsh()
     # Test si c'est le propriétaire
     logger_info "Test si c'est le propriétaire"
     core_checkIfOwner
-    [[ $? -ne 0 ]] && logger_error "Seul l'utilisateur \"$(core_getOwner)\" peut exécuter ce script"
+    [[ $? -ne 0 ]] && logger_critical "Seul l'utilisateur \"$(core_getOwner)\" peut exécuter ce script"
 
     command_update_olixsh_download
-    [[ $? -ne 0 ]] && logger_error "Impossible de télécharger la mise à jour oliXsh"
+    [[ $? -ne 0 ]] && logger_critical "Impossible de télécharger la mise à jour oliXsh"
     command_update_olixsh_deploy
-    [[ $? -ne 0 ]] && logger_error "Impossible de déployer la mise à jour oliXsh"
+    [[ $? -ne 0 ]] && logger_critical "Impossible de déployer la mise à jour oliXsh"
 
     echo -e "${CVERT}La mise à jour de ${CCYAN}oliXsh${CVERT} s'est terminé avec succès${CVOID}"
 }

@@ -77,7 +77,7 @@ function command_remove_module()
     # Test si c'est le propriétaire
     logger_info "Test si c'est le propriétaire"
     core_checkIfOwner
-    [[ $? -ne 0 ]] && logger_error "Seul l'utilisateur \"$(core_getOwner)\" peut exécuter ce script"
+    [[ $? -ne 0 ]] && logger_critical "Seul l'utilisateur \"$(core_getOwner)\" peut exécuter ce script"
     
     logger_info "Vérification du module $1"
     if ! $(module_isExist $1); then
@@ -92,13 +92,13 @@ function command_remove_module()
     fi
 
     module_removeCompletion $1
-    [[ $? -ne 0 ]] && logger_error "Impossible de supprimer le fichier de completion du module $1"
+    [[ $? -ne 0 ]] && logger_critical "Impossible de supprimer le fichier de completion du module $1"
 
     module_removeFileConfiguration $1
-    [[ $? -ne 0 ]] && logger_error "Impossible de supprimer le fichier de configuration du module $1"
+    [[ $? -ne 0 ]] && logger_critical "Impossible de supprimer le fichier de configuration du module $1"
     
     module_removeDirModule $1
-    [[ $? -ne 0 ]] && logger_error "Impossible de supprimer le module $1"
+    [[ $? -ne 0 ]] && logger_critical "Impossible de supprimer le module $1"
 
     echo -e "${CVERT}La suppression du module ${CCYAN}$1${CVERT} s'est terminé avec succès${CVOID}"
 }

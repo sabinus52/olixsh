@@ -50,10 +50,10 @@ function logger_syslog()
 
 ###
 # Log le message et l'affiche eventuellement
-# @param $1 : Niveau de log (debug info warning error)
+# @param $1 : Niveau de log (debug info warning err crit)
 # @param $2 : Message
 ##
-function logger_log() 
+function logger_log()
 {
     local SWITCH
     local LEVEL=$1
@@ -64,7 +64,8 @@ function logger_log()
     if [[ "${LEVEL}" != "debug" ]]\
     && [[ "${LEVEL}" != "info" ]]\
     && [[ "${LEVEL}" != "warning" ]]\
-    && [[ "${LEVEL}" != "error" ]]; then
+    && [[ "${LEVEL}" != "err" ]]\
+    && [[ "${LEVEL}" != "crit" ]]; then
         LEVEL="info"
     fi
     
@@ -97,7 +98,8 @@ function logger_print()
         debug)      echo -e "${CGRIS}${MESSAGE}${CVOID}" >&2;;
         info)       echo -e "${Ccyan}${MESSAGE}${CVOID}" >&2;;
         warning)    echo -e "${Cjaune}${MESSAGE}${CVOID}" >&2;;
-        error)      echo -e "${Crouge}${MESSAGE}${CVOID}" >&2;;
+        err)        echo -e "${Crouge}${MESSAGE}${CVOID}" >&2;;
+        crit)       echo -e "${Crouge}${MESSAGE}${CVOID}" >&2;;
     esac
 }
 
@@ -147,24 +149,26 @@ function logger_error()
     local ERRFILE
     if [[ -s ${OLIX_LOGGER_FILE_ERR} ]]; then
         ERRFILE=$(cat ${OLIX_LOGGER_FILE_ERR})
-        logger_log "error" "${ERRFILE}"
+        logger_log "err" "${ERRFILE}"
     else
-        logger_log "error" "$@"
+        logger_log "err" "$@"
     fi
-    core_exit 1 "$@"
 }
 
 
 ###
-# Mode WARNING avec fichier d'erreur
+# Mode CRITICAL
+# Tous les erreurs sont envoyés dans le syslog
+# plus arret du sript
 ##
-function logger_warning2()
+function logger_critical()
 {
     local ERRFILE
     if [[ -s ${OLIX_LOGGER_FILE_ERR} ]]; then
         ERRFILE=$(cat ${OLIX_LOGGER_FILE_ERR})
-        logger_warning "${ERRFILE}"
+        logger_log "crit" "${ERRFILE}"
     else
-        logger_warning "$@"
+        logger_log "crit" "$@"
     fi
+    core_exit 1 "$@"
 }

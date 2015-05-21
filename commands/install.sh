@@ -89,7 +89,7 @@ function command_install_module()
     # Test si c'est le propriétaire
     logger_info "Test si c'est le propriétaire"
     core_checkIfOwner
-    [[ $? -ne 0 ]] && logger_error "Seul l'utilisateur \"$(core_getOwner)\" peut exécuter ce script"
+    [[ $? -ne 0 ]] && logger_critical "Seul l'utilisateur \"$(core_getOwner)\" peut exécuter ce script"
     
     logger_info "Vérification du module $1"
     if ! $(module_isExist $1); then
@@ -123,7 +123,7 @@ function command_install_olixsh()
     # Test si ROOT
     logger_info "Test si root"
     core_checkIfRoot
-    [[ $? -ne 0 ]] && logger_error "Seulement root peut executer l'installation d'oliXsh"
+    [[ $? -ne 0 ]] && logger_critical "Seulement root peut executer l'installation d'oliXsh"
 
     echo -e "${CBLANC}Installation de oliXsh dans le système${CVOID}"
     echo -e "${CBLANC}--------------------------------------${CVOID}"

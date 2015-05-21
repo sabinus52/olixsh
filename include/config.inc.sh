@@ -70,7 +70,7 @@ function config_loadConfigModule()
 
     logger_info "Test si la configuration est déjà effectuée"
     if ! config_isModuleExist $1; then
-        logger_error "Pour reinitialiser la configuration du module '$1', utiliser : ${OLIX_CORE_SHELL_NAME} $1 init"
+        logger_critical "Pour reinitialiser la configuration du module '$1', utiliser : ${OLIX_CORE_SHELL_NAME} $1 init"
     fi
 
     local FILECONF=$(config_getFilenameModule $1)

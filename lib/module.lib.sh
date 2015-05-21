@@ -33,11 +33,11 @@ function module_install()
 
     # Traitement
     module_download $1
-    [[ $? -ne 0 ]] && logger_error "Impossible de télécharger le module $1"
+    [[ $? -ne 0 ]] && logger_critical "Impossible de télécharger le module $1"
     module_deploy $1
-    [[ $? -ne 0 ]] && logger_error "Impossible de déployer le module $1"
+    [[ $? -ne 0 ]] && logger_critical "Impossible de déployer le module $1"
     module_installCompletion $1
-    [[ $? -ne 0 ]] && logger_error "Impossible de déployer le fichier de completion du module $1"
+    [[ $? -ne 0 ]] && logger_critical "Impossible de déployer le fichier de completion du module $1"
 
     source $(module_getScript "$1")
     if [[ ${UPDATE} == false ]]; then

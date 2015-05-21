@@ -197,7 +197,7 @@ function module_initialize()
     # Test si c'est le propriétaire
     logger_info "Test si c'est le propriétaire"
     core_checkIfOwner
-    [[ $? -ne 0 ]] && logger_error "Seul l'utilisateur \"$(core_getOwner)\" peut exécuter ce script"
+    [[ $? -ne 0 ]] && logger_critical "Seul l'utilisateur \"$(core_getOwner)\" peut exécuter ce script"
 
     if config_isModuleExist ${OLIX_MODULE_NAME}; then
         logger_info "Chargement du fichier de configuration ${OLIX_MODULE_FILECONF}"

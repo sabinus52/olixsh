@@ -58,10 +58,10 @@ function filesystem_getSizeFileHuman()
 function filesystem_copyFileConfiguration()
 {
     logger_debug "filesystem_copyFileConfiguration ($1, $2)"
-    [[ ! -f $1 ]] && logger_error "Le fichier '$1' n'existe pas"
+    [[ ! -f $1 ]] && logger_critical "Le fichier '$1' n'existe pas"
     logger_debug "cp $1 $2"
     cp $1 $2 > ${OLIX_LOGGER_FILE_ERR} 2>&1
-    [[ $? -ne 0 ]] && logger_error
+    [[ $? -ne 0 ]] && logger_critical
     return 0
 }
 
@@ -74,9 +74,9 @@ function filesystem_copyFileConfiguration()
 function filesystem_linkNodeConfiguration()
 {
     logger_debug "filesystem_linkNodeConfiguration ($1, $2)"
-    [[ ! -f $1 ]] && logger_error "Le fichier '$1' n'existe pas"
+    [[ ! -f $1 ]] && logger_critical "Le fichier '$1' n'existe pas"
     logger_debug "ln -sf $(readlink -f $1) $2"
     ln -sf $(readlink -f $1) $2 > ${OLIX_LOGGER_FILE_ERR} 2>&1
-    [[ $? -ne 0 ]] && logger_error
+    [[ $? -ne 0 ]] && logger_critical
     return 0
 }
