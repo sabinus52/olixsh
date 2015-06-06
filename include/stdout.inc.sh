@@ -30,7 +30,7 @@ function stdout_printVersion()
     VERSION="Version ${CVERT}${OLIX_VERSION}${CVOID}"
     echo -e "${CVIOLET}oliXsh${CVOID} ${VERSION}, for Linux"
     echo -e "Copyright (c) 2013, $(date '+%Y') Olivier (Sabinus52). All rights reserved."
-    echo -e "Link GitHub : ${Ccyan}https://github.com/sabinus52/olixsh${CVOID}"
+    echo -e "Link GitHub : ${Ccyan}https://github.com/sabinus52/olixsh2${CVOID}"
 }
 
 
