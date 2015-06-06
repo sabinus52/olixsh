@@ -6,6 +6,9 @@
 ##
 
 
+OLIX_REPORT_EXTENSION=".txt"
+
+
 ###
 # En tête du rapport
 ##
@@ -33,9 +36,9 @@ report_printFooter()
 ##
 function report_printHead1()
 {
-    logger_debug "report_printHead1 ($@)"
+    logger_debug "report_printHead1 ($1, $2, $3, $4, $5)"
     echo >> ${OLIX_REPORT_FILENAME}
-    echo " $(printf "$@")" >> ${OLIX_REPORT_FILENAME}
+    echo " $(printf "$1" "$2" "$3" "$4")" >> ${OLIX_REPORT_FILENAME}
     echo "===============================================================================" >> ${OLIX_REPORT_FILENAME}
 }
 

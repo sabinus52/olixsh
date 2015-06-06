@@ -56,7 +56,7 @@ function stdin_readDirectory()
         echo -en "[${CBLANC}${OLIX_STDIN_RETURN}${CVOID}] ? "
         read -e -p "" RESPONSE
         [[ ! -z ${RESPONSE} ]] && OLIX_STDIN_RETURN=${RESPONSE}
-        [[ -d ${OLIX_STDIN_RETURN} && -w ${OLIX_STDIN_RETURN} ]] && break
+        [[ -d ${OLIX_STDIN_RETURN} ]] && break
         logger_warning "Le répertoire '${OLIX_STDIN_RETURN}' est inaccessible"
     done
 }

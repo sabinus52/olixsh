@@ -82,6 +82,7 @@ function stdout_printHead1()
     echo
     echo -e "${CVIOLET}$(printf "$MSG" "${CCYAN}$1${CVIOLET}" "${CCYAN}$2${CVIOLET}" "${CCYAN}$3${CVIOLET}")${CVOID}"
     echo -e "${CBLANC}===============================================================================${CVOID}"
+    type "report_printHead1" >/dev/null 2>&1 && report_printHead1 "${MSG}" "$1" "$2" "$3" "$4" "$5" "$6" "$7" "$8" "$9"
 }
 
 
@@ -96,6 +97,7 @@ function stdout_printHead2()
     echo
     echo -e "${CVIOLET}$(printf "$1" "${CCYAN}$2${CVIOLET}")${CVOID}"
     echo -e "${CBLANC}-------------------------------------------------------------------------------${CVOID}"
+    type "report_printHead2" >/dev/null 2>&1 && report_printHead2 "$1" "$2"
 }
 
 
@@ -106,6 +108,7 @@ function stdout_printLine()
 {
     logger_debug "stdout_printLine ()"
     echo -e "${CBLANC}-------------------------------------------------------------------------------${CVOID}"
+    type "report_printLine" >/dev/null 2>&1 && report_printLine
 }
 
 
@@ -116,8 +119,9 @@ function stdout_printLine()
 ##
 function stdout_print()
 {
-    logger_debug "stdout_print ($1)"
+    logger_debug "stdout_print ($1, $2)"
     echo -e "$2$1${CVOID}"
+    type "report_print" >/dev/null 2>&1 && report_print "$1"
 }
 
 
@@ -141,6 +145,7 @@ function stdout_printMessageReturn()
         echo -en " ${CVERT}$3${CVOID}"
         [[ ! -z $4 ]] && echo -e " ${Cvert}($4s)${CVOID}" || echo
     fi
+    type "report_printMessageReturn" >/dev/null 2>&1 && report_printMessageReturn "$1" "$2" "$3" "$4"
     return $1
 }
 
@@ -155,6 +160,7 @@ function stdout_printInfo()
     logger_debug "stdout_printInfo ($1, $2)"
     echo -en $1; stdout_strpad "$1" 64 " "; echo -n " :"
     echo -e " ${CBLEU}$2${CVOID}"
+    type "report_printInfo" >/dev/null 2>&1 && report_printInfo "$1" "$2"
 }
 
 
@@ -166,4 +172,5 @@ function stdout_printFile()
 {
     logger_debug "stdout_printFile ($1)"
     cat $1
+    type "report_printFile" >/dev/null 2>&1 && report_printFile "$1"
 }

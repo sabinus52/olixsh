@@ -6,6 +6,9 @@
 ##
 
 
+OLIX_REPORT_EXTENSION=".html"
+
+
 ###
 # En tête du rapport
 ##

@@ -67,8 +67,7 @@ function backup_moveArchive()
     mv $1 $2/ > ${OLIX_LOGGER_FILE_ERR} 2>&1
 
     stdout_printMessageReturn $? "Déplacement vers le dossier de backup" "" "$((SECONDS-START))"
-    report_printMessageReturn $? "Déplacement vers le dossier de backup" "" "$((SECONDS-START))"
-    [[ $? -ne 0 ]] && report_warning && logger_warning2 && return 1
+    [[ $? -ne 0 ]] && logger_warning && return 1
     return 0
 }
 
@@ -106,9 +105,7 @@ function backup_compress()
     esac
     
     stdout_printMessageReturn ${RET} "Compression du fichier" "$(filesystem_getSizeFileHuman ${OLIX_FUNCTION_RESULT})" "$((SECONDS-START))"
-    report_printMessageReturn ${RET} "Compression du fichier" "$(filesystem_getSizeFileHuman ${OLIX_FUNCTION_RESULT})" "$((SECONDS-START))"
-
-    [[ $? -ne 0 ]] && report_warning && logger_warning2 && return 1
+    [[ $? -ne 0 ]] && logger_warning && return 1
     return 0
 }
 
@@ -133,8 +130,7 @@ function backup_transfertFTP()
     ftp_put "$1" "$2" "$3" "$4" "$5" "$6"
 
     stdout_printMessageReturn $? "Transfert vers le serveur de backup" "" "$((SECONDS-START))"
-    report_printMessageReturn $? "Transfert vers le serveur de backup" "" "$((SECONDS-START))"
-    [[ $? -ne 0 ]] && report_warning && logger_warning2 && return 1
+    [[ $? -ne 0 ]] && logger_warning && return 1
     return 0
 }
 
@@ -161,19 +157,15 @@ function backup_purge()
     esac
 
     stdout_printInfo "Purge des anciennes sauvegardes" "$(cat ${LIST_FILE_PURGED} | wc -l)"
-    report_printInfo "Purge des anciennes sauvegardes" "$(cat ${LIST_FILE_PURGED} | wc -l)"
-    stdout_printFile "${LIST_FILE_PURGED}"
-    report_printFile "${LIST_FILE_PURGED}" "font-size:0.8em;color:Olive;"
-    [[ ${RET} -ne 0 ]] && report_warning && logger_warning2 && return 1
+    stdout_printFile "${LIST_FILE_PURGED}" "font-size:0.8em;color:Olive;"
+    [[ ${RET} -ne 0 ]] && logger_warning && return 1
 
     stdout_printInfo "Liste des sauvegardes restantes" "$(find $1 -maxdepth 1 -name "$2" | wc -l)"
-    report_printInfo "Liste des sauvegardes restantes" "$(find $1 -maxdepth 1 -name "$2" | wc -l)"
     find $1 -maxdepth 1 -name "$2" -printf "%f\n" |sort > ${LIST_FILE_PURGED}
     RET=$?
-    stdout_printFile "${LIST_FILE_PURGED}"
-    report_printFile "${LIST_FILE_PURGED}" "font-size:0.8em;color:SteelBlue;"
+    stdout_printFile "${LIST_FILE_PURGED}" "font-size:0.8em;color:SteelBlue;"
 
-    [[ $RET -ne 0 ]] && report_warning && logger_warning2 && return 1
+    [[ $RET -ne 0 ]] && logger_warning && return 1
     rm -f ${LIST_FILE_PURGED}
     return 0
 }
@@ -208,7 +200,6 @@ function backup_directory()
     logger_debug "backup_directory (${DIR}, ${EXCLUDE}, $2, $3, $4, $5, $6 ,$6, $7, $8, $9)"
 
     stdout_printHead2 "Sauvegarde du dossier %s" "${DIR}"
-    report_printHead2 "Sauvegarde du dossier %s" "${DIR}"
 
     local FILEBCK="${DIRBCK}/backup-$(basename ${DIR})-${OLIX_SYSTEM_DATE}.tar"
     logger_info "Sauvegarde Dossier (${DIR}) -> ${FILEBCK}"
@@ -217,8 +208,7 @@ function backup_directory()
 
     file_makeArchive "${DIR}" "${FILEBCK}" "${EXCLUDE}"
     stdout_printMessageReturn $? "Archivage du dossier" "$(filesystem_getSizeFileHuman ${FILEBCK})" "$((SECONDS-START))"
-    report_printMessageReturn $? "Archivage du dossier" "$(filesystem_getSizeFileHuman ${FILEBCK})" "$((SECONDS-START))"
-    [[ $? -ne 0 ]] && report_warning && logger_warning2 && return 1
+    [[ $? -ne 0 ]] && logger_warning && return 1
 
     backup_finalize "${FILEBCK}" "${DIRBCK}" "${COMPRESS}" "${PURGE}" "dump-${BASE}-*" \
         "${FTP}" "${FTP_HOST}" "${FTP_USER}" "${FTP_PASS}" "${FTP_PATH}"
@@ -250,15 +240,13 @@ function backup_synchronizeFTP()
     [[ ${FTP} == false ]] && return 0
 
     stdout_printHead2 "Synchronisation avec le serveur FTP %s" "${FTP_HOST}"
-    report_printHead2 "Synchronisation avec le serveur FTP %s" "${FTP_HOST}"
     START=${SECONDS}
 
     ftp_synchronize "${FTP}" "${FTP_HOST}" "${FTP_USER}" "${FTP_PASS}" "${FTP_PATH}" "${REPOSITORY}"
 
     stdout_printMessageReturn $? "Synchronisation avec le serveur FTP" "" "$((SECONDS-START))"
-    report_printMessageReturn $? "Synchronisation avec le serveur FTP" "" "$((SECONDS-START))"
-    [[ $? -ne 0 ]] && report_warning && logger_warning2 && return 1
+    [[ $? -ne 0 ]] && logger_warning && return 1
 
-    report_printFile "${OLIX_FUNCTION_RESULT}" "font-size:0.8em;"
+    stdout_printFile "${OLIX_FUNCTION_RESULT}" "font-size:0.8em;"
     return 0
 }

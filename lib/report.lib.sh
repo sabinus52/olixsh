@@ -6,7 +6,8 @@
 ##
 
 
-OLIX_REPORT_FORMAT="text"
+# Rapport désactivé par défaut
+OLIX_REPORT_FORMAT=false
 OLIX_REPORT_FILENAME=""
 OLIX_REPORT_EMAIL=""
 
@@ -23,6 +24,13 @@ function report_initialize()
 {
     logger_debug "report_initialize ($1, $2, $3, $4)"
 
+    case $1 in
+        HTML|html)  source lib/report.html.lib.sh;;
+        TEXT|text)  source lib/report.text.lib.sh;;
+        *)          logger_warning "Type de rapport non défini"
+                    return;;
+    esac
+
     # Test du dossier
     local DIR=$2
     if [[ ! -d $2 ]]; then
@@ -30,16 +38,8 @@ function report_initialize()
         DIR="/tmp"
     fi
 
-    case $1 in
-        HTML|html)  source lib/report.html.lib.sh
-                    OLIX_REPORT_FILENAME="$DIR/$3.html";;
-        TEXT|text)  source lib/report.text.lib.sh
-                    OLIX_REPORT_FILENAME="$DIR/$3.txt";;
-        *)          logger_warning "Type de rapport non défini"
-                    return;;
-    esac
-
     OLIX_REPORT_FORMAT=$1
+    OLIX_REPORT_FILENAME="$DIR/$3${OLIX_REPORT_EXTENSION}"
     OLIX_REPORT_EMAIL=$4
 
     echo > ${OLIX_REPORT_FILENAME}

@@ -150,8 +150,10 @@ function logger_error()
     if [[ -s ${OLIX_LOGGER_FILE_ERR} ]]; then
         ERRFILE=$(cat ${OLIX_LOGGER_FILE_ERR})
         logger_log "err" "${ERRFILE}"
+        type "report_error" >/dev/null 2>&1 && report_error "${ERRFILE}"
     else
         logger_log "err" "$@"
+        type "report_error" >/dev/null 2>&1 && report_error "$@"
     fi
 }
 
@@ -167,8 +169,10 @@ function logger_critical()
     if [[ -s ${OLIX_LOGGER_FILE_ERR} ]]; then
         ERRFILE=$(cat ${OLIX_LOGGER_FILE_ERR})
         logger_log "crit" "${ERRFILE}"
+        type "report_error" >/dev/null 2>&1 && report_error "${ERRFILE}"
     else
         logger_log "crit" "$@"
+        type "report_error" >/dev/null 2>&1 && report_error "$@"
     fi
     core_exit 1 "$@"
 }
