@@ -1,0 +1,67 @@
+###
+# Completion du script OliXsh
+# ==============================================================================
+# @package olixsh
+# @author Olivier <sabinus52@gmail.com>
+##
+
+_olixsh() 
+{
+    local I CUR PREV FIRST 
+    local LST_OPTS LST_CMDS LST_MODS
+    COMPREPLY=()
+    CUR="${COMP_WORDS[COMP_CWORD]}"
+    PREV="${COMP_WORDS[COMP_CWORD-1]}"
+    FIRST=
+    LST_OPTS="--help --debug --verbose --no-warnings --version"
+    LST_CMDS="install update remove"
+    LST_MODS=$(${OLIX_ROOT_COMP}/olixsh update --list)
+
+    # Recherche quel est le module ou la commande utilisé
+    for I in ${COMP_WORDS[*]}; do
+        [[ -n ${FIRST} ]] && break
+        if [[ ${LST_CMDS} =~ (^|[[:space:]])"${I}"($|[[:space:]]) ]] ; then
+            FIRST=${I}
+        elif [[ ${LST_MODS} =~ (^|[[:space:]])"${I}"($|[[:space:]]) ]]; then
+            FIRST=${I}
+        fi
+    done
+
+    # Si commande ou module trouvé alors on propose la completion lié à cette commande
+    if [[ -n ${FIRST} ]]; then
+        case "${FIRST}" in
+            install)
+                [[ ${PREV} != ${FIRST} ]] && return 0
+                COMPREPLY=( $(compgen -W "$(${OLIX_ROOT_COMP}/olixsh install --list --with-olix)" -- ${CUR}) )
+                ;;
+            update)
+                [[ ${PREV} != ${FIRST} ]] && return 0
+                COMPREPLY=( $(compgen -W "$(${OLIX_ROOT_COMP}/olixsh update --list --with-olix)" -- ${CUR}) )
+                ;;
+            remove)
+                [[ ${PREV} != ${FIRST} ]] && return 0
+                COMPREPLY=( $(compgen -W "$(${OLIX_ROOT_COMP}/olixsh remove --list)" -- ${CUR}) )
+                ;;
+            *)
+                if [[ -r ${OLIX_ROOT_COMP}/completion/${FIRST} ]]; then
+                    source ${OLIX_ROOT_COMP}/completion/${FIRST}
+                    _olixsh_module
+                fi
+                ;;
+        esac
+        return 0
+    fi
+    
+    # Completion si commande ou module non trouvé
+    case "${CUR}" in    
+        -*)
+            COMPREPLY=( $(compgen -W "${LST_OPTS}" -- ${CUR}) )
+            return 0
+            ;;
+        *)  COMPREPLY=( $(compgen -W "${LST_CMDS} ${LST_MODS}" -- ${CUR}) )
+            return 0
+            ;;
+    esac
+}
+
+#complete -F _olixsh otestsh
