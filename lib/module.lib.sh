@@ -106,7 +106,7 @@ function module_installCompletion()
     module_removeCompletion $1
     [[ ! -r modules/$1/completion ]] && return 0
     logger_info "Installation du fichier de completion"
-    ln -s modules/$1/completion completion/$1 > ${OLIX_LOGGER_FILE_ERR} 2>&1
+    ln -s ../modules/$1/completion completion/$1 > ${OLIX_LOGGER_FILE_ERR} 2>&1
     return $?
 }
 

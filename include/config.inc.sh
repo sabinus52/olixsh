@@ -66,7 +66,7 @@ function config_isModuleExist()
 ## 
 function config_loadConfigModule()
 {
-    logger_debug "config_loadConfigModule ()"
+    logger_debug "config_loadConfigModule ($1)"
 
     logger_info "Test si la configuration est déjà effectuée"
     if ! config_isModuleExist $1; then
@@ -85,7 +85,7 @@ function config_loadConfigModule()
 ## 
 function config_loadConfigQuietModule()
 {
-    logger_debug "config_loadConfigQuietModule ()"
+    logger_debug "config_loadConfigQuietModule ($1)"
 
     logger_info "Test si la configuration est déjà effectuée"
     if ! config_isModuleExist $1; then
