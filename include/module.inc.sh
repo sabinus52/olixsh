@@ -55,8 +55,10 @@ function module_isExist()
 {
     logger_debug "module_isExist ($1)"
     local RESULT
-    RESULT=$(grep "^$1|" ${OLIX_MODULE_REPOSITORY_USER})
-    [[ $? -eq 0 ]] && return 0
+    if [[ -f ${OLIX_MODULE_REPOSITORY_USER} ]]; then
+        RESULT=$(grep "^$1|" ${OLIX_MODULE_REPOSITORY_USER})
+        [[ $? -eq 0 ]] && return 0
+    fi
     RESULT=$(grep "^$1|" ${OLIX_MODULE_REPOSITORY})
     [[ $? -eq 0 ]] && return 0
     return 1
@@ -105,8 +107,8 @@ function module_getLabel()
 {
     logger_debug "module_getLabel ($1)"
     local RESULT MODULE URL LABEL
-    RESULT=$(grep "^$1|" ${OLIX_MODULE_REPOSITORY_USER})
-    [[ $? -ne 0 ]] && RESULT=$(grep "^$1|" ${OLIX_MODULE_REPOSITORY})
+    [[ -f ${OLIX_MODULE_REPOSITORY_USER} ]] && RESULT=$(grep "^$1|" ${OLIX_MODULE_REPOSITORY_USER})
+    [[ -z ${RESULT} ]] && RESULT=$(grep "^$1|" ${OLIX_MODULE_REPOSITORY})
     IFS='|' read MODULE URL LABEL <<< ${RESULT}
     echo ${LABEL}
 }
@@ -118,10 +120,10 @@ function module_getLabel()
 ##
 function module_getUrl()
 {
-    logger_debug "module_getLabel ($1)"
+    logger_debug "module_getUrl ($1)"
     local RESULT MODULE URL LABEL PROTOCOL URI
-    RESULT=$(grep "^$1|" ${OLIX_MODULE_REPOSITORY_USER})
-    [[ $? -ne 0 ]] && RESULT=$(grep "^$1|" ${OLIX_MODULE_REPOSITORY})
+    [[ -f ${OLIX_MODULE_REPOSITORY_USER} ]] && RESULT=$(grep "^$1|" ${OLIX_MODULE_REPOSITORY_USER})
+    [[ -z ${RESULT} ]] && RESULT=$(grep "^$1|" ${OLIX_MODULE_REPOSITORY})
     IFS='|' read MODULE URL LABEL <<< ${RESULT}
     IFS=':' read PROTOCOL URI <<< ${URL}
     if [[ ${PROTOCOL} == "github" ]]; then
