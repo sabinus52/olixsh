@@ -85,7 +85,7 @@ function module_getListAvailable()
     logger_debug "module_getListAvailable ()"
     local FILES="${OLIX_MODULE_REPOSITORY}"
     [[ -r ${OLIX_MODULE_REPOSITORY_USER} ]] && FILES="${FILES} ${OLIX_MODULE_REPOSITORY_USER}"
-    cat ${FILES} | grep -v "^#" | cut -d '|' -f1 | sort | uniq
+    cat ${FILES} | grep -v "^#" | grep -v "^olixsh" | cut -d '|' -f1 | sort | uniq
 }
 
 
