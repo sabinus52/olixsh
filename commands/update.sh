@@ -139,7 +139,7 @@ function command_update_olixsh_download()
     local OPTS="--tries=3 --timeout=30 --no-check-certificate"
     [[ ${OLIX_OPTION_VERBOSEDEBUG} == true ]] && OPTS="${OPTS} --debug"
     [[ ${OLIX_OPTION_VERBOSE} == false ]] && OPTS="${OPTS} --quiet"
-    OPTS="${OPTS} --output-document=/tmp/olixsh.tar.gz"
+    OPTS="${OPTS} --output-document=/tmp/olix.tar.gz"
     logger_debug "wget ${OPTS} ${URL}"
 
     wget ${OPTS} ${URL}
@@ -154,10 +154,10 @@ function command_update_olixsh_deploy()
 {
     logger_debug "command_update_olixsh_deploy ()"
 
-    file_extractArchive "/tmp/olixsh.tar.gz" "/tmp" "--gzip"
+    file_extractArchive "/tmp/olix.tar.gz" "/tmp" "--gzip"
     [[ $? -ne 0 ]] && return 1
 
-    local DIRTAR="/tmp/$(tar -tf /tmp/olixsh.tar.gz | grep -o '^[^/]\+' | sort -u)"
+    local DIRTAR="/tmp/$(tar -tf /tmp/olix.tar.gz | grep -o '^[^/]\+' | sort -u)"
     logger_debug "TAR DIR SOURCE=${DIRTAR}"
 
     logger_info "Copie des fichiers à mettre à jour"

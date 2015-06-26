@@ -26,10 +26,17 @@ if [[ -d ${DESTINATION}/${DIRNAME} ]]; then
     [[ $? -ne 0 ]] && echo "Impossible de supprimer le dossier ${DESTINATION}/${DIRNAME}" && exit 1
 fi
 mkdir ${DESTINATION}/${DIRNAME}
-[[ $? -ne 0 ]] && echo "Impossible de créer le dossier ${DESTINATION}/${DIRNAME}" && exit 1
+if [[ $? -ne 0 ]]; then
+    echo "Impossible de créer le dossier ${DESTINATION}/${DIRNAME}"
+    rm -f ${TARBALL}
+    exit 1
+fi
 tar --extract --file=${TARBALL}  --strip-components=1 --directory=${DESTINATION}/${DIRNAME}
-[[ $? -ne 0 ]] && echo "Erreur lors du l'extraction de l'archive" && exit 1
-
+if [[ $? -ne 0 ]]; then
+    echo "Erreur lors du l'extraction de l'archive"
+    rm -f ${TARBALL}
+    exit 1
+rm -f ${TARBALL}
 
 # Installation
 cd ${DESTINATION}/${DIRNAME}
