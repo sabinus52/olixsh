@@ -6,7 +6,13 @@ Shell Tools for Ubuntu Server and manager of projects
 Installation d'oliXsh
 ---------------------
 
-Récupérer les sources depuis le dépôt Git :
+Installation en mode direct
+``` bash
+curl -s https://raw.githubusercontent.com/sabinus52/olixsh2/master/install.sh | bash -s -- [DOSSIER_DE_DESTINATION]
+```
+avec *[DOSSIER_DE_DESTINATION]* le dossier d'installation (Par défaut `/opt`)
+
+ou récupérer les sources depuis le dépôt Git :
 ``` bash
 git clone https://github.com/sabinus52/olixsh2.git
 ```
