@@ -109,7 +109,8 @@ function module_getLabel()
     local RESULT MODULE URL LABEL
     [[ -f ${OLIX_MODULE_REPOSITORY_USER} ]] && RESULT=$(grep "^$1|" ${OLIX_MODULE_REPOSITORY_USER})
     [[ -z ${RESULT} ]] && RESULT=$(grep "^$1|" ${OLIX_MODULE_REPOSITORY})
-    IFS='|' read MODULE URL LABEL <<< ${RESULT}
+    #IFS='|' read MODULE URL LABEL <<< ${RESULT}
+    IFS='|' read MODULE URL LABEL < <(echo -e "${RESULT}")
     echo ${LABEL}
 }
 
@@ -124,8 +125,8 @@ function module_getUrl()
     local RESULT MODULE URL LABEL PROTOCOL URI
     [[ -f ${OLIX_MODULE_REPOSITORY_USER} ]] && RESULT=$(grep "^$1|" ${OLIX_MODULE_REPOSITORY_USER})
     [[ -z ${RESULT} ]] && RESULT=$(grep "^$1|" ${OLIX_MODULE_REPOSITORY})
-    IFS='|' read MODULE URL LABEL <<< ${RESULT}
-    IFS=':' read PROTOCOL URI <<< ${URL}
+    IFS='|' read MODULE URL LABEL < <(echo -e "${RESULT}")
+    IFS=':' read PROTOCOL URI < <(echo -e "${RESULT}")
     if [[ ${PROTOCOL} == "github" ]]; then
         logger_debug "GITHUB=https:${URI}"
         URL=$(curl -s https:${URI} | grep 'tarball_url' | cut -d\" -f4)
