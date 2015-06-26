@@ -20,7 +20,7 @@ source lib/file.lib.sh
 ###
 # Constantes
 ##
-OLIX_COMMAND_COMPLETION="/etc/bash_completion.d/olixsh"
+OLIX_COMMAND_COMPLETION="/etc/bash_completion.d/olixsh.sh"
 
 
 ###
