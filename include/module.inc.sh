@@ -55,8 +55,10 @@ function module_isExist()
 {
     logger_debug "module_isExist ($1)"
     local RESULT
-    RESULT=$(grep "^$1|" ${OLIX_MODULE_REPOSITORY_USER})
-    [[ $? -eq 0 ]] && return 0
+    if [[ -f ${OLIX_MODULE_REPOSITORY_USER} ]]; then
+        RESULT=$(grep "^$1|" ${OLIX_MODULE_REPOSITORY_USER})
+        [[ $? -eq 0 ]] && return 0
+    fi
     RESULT=$(grep "^$1|" ${OLIX_MODULE_REPOSITORY})
     [[ $? -eq 0 ]] && return 0
     return 1
@@ -83,7 +85,7 @@ function module_getListAvailable()
     logger_debug "module_getListAvailable ()"
     local FILES="${OLIX_MODULE_REPOSITORY}"
     [[ -r ${OLIX_MODULE_REPOSITORY_USER} ]] && FILES="${FILES} ${OLIX_MODULE_REPOSITORY_USER}"
-    cat ${FILES} | grep -v "^#" | cut -d '|' -f1 | sort | uniq
+    cat ${FILES} | grep -v "^#" | grep -v "^olixsh" | cut -d '|' -f1 | sort | uniq
 }
 
 
@@ -105,9 +107,10 @@ function module_getLabel()
 {
     logger_debug "module_getLabel ($1)"
     local RESULT MODULE URL LABEL
-    RESULT=$(grep "^$1|" ${OLIX_MODULE_REPOSITORY_USER})
-    [[ $? -ne 0 ]] && RESULT=$(grep "^$1|" ${OLIX_MODULE_REPOSITORY})
-    IFS='|' read MODULE URL LABEL <<< ${RESULT}
+    [[ -f ${OLIX_MODULE_REPOSITORY_USER} ]] && RESULT=$(grep "^$1|" ${OLIX_MODULE_REPOSITORY_USER})
+    [[ -z ${RESULT} ]] && RESULT=$(grep "^$1|" ${OLIX_MODULE_REPOSITORY})
+    #IFS='|' read MODULE URL LABEL <<< ${RESULT}
+    IFS='|' read MODULE URL LABEL < <(echo -e "${RESULT}")
     echo ${LABEL}
 }
 
@@ -118,12 +121,12 @@ function module_getLabel()
 ##
 function module_getUrl()
 {
-    logger_debug "module_getLabel ($1)"
+    logger_debug "module_getUrl ($1)"
     local RESULT MODULE URL LABEL PROTOCOL URI
-    RESULT=$(grep "^$1|" ${OLIX_MODULE_REPOSITORY_USER})
-    [[ $? -ne 0 ]] && RESULT=$(grep "^$1|" ${OLIX_MODULE_REPOSITORY})
-    IFS='|' read MODULE URL LABEL <<< ${RESULT}
-    IFS=':' read PROTOCOL URI <<< ${URL}
+    [[ -f ${OLIX_MODULE_REPOSITORY_USER} ]] && RESULT=$(grep "^$1|" ${OLIX_MODULE_REPOSITORY_USER})
+    [[ -z ${RESULT} ]] && RESULT=$(grep "^$1|" ${OLIX_MODULE_REPOSITORY})
+    IFS='|' read MODULE URL LABEL < <(echo -e "${RESULT}")
+    IFS=':' read PROTOCOL URI < <(echo -e "${RESULT}")
     if [[ ${PROTOCOL} == "github" ]]; then
         logger_debug "GITHUB=https:${URI}"
         URL=$(curl -s https:${URI} | grep 'tarball_url' | cut -d\" -f4)

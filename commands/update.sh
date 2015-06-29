@@ -28,7 +28,7 @@ olixcmd_usage()
     echo
     echo -e "Mise à jour des modules oliXsh"
     echo
-    echo -e "${CBLANC} Usage : ${CVIOLET}$(basename ${OLIX_ROOT_SCRIPT}) ${CVERT}update ${CJAUNE}[MODULE]${CVOID}"
+    echo -e "${CBLANC} Usage : ${CVIOLET}$(basename ${OLIX_ROOT_SCRIPT}) ${CVERT}update ${CJAUNE}module${CVOID}"
     echo
     echo -e "${CJAUNE}Liste des MODULES disponibles${CVOID} :"
     echo -e "${Cjaune} olix ${CVOID}        : Mise à jour de oliXsh"
@@ -131,16 +131,15 @@ function command_update_olixsh()
 ##
 function command_update_olixsh_download()
 {
-    logger_debug "command_update_olixsh_download ($1)"
+    logger_debug "command_update_olixsh_download ()"
 
-    local URL=$(curl -s ${OLIX_CORE_GITURL} | grep 'tarball_url' | cut -d\" -f4)
-    
+    local URL=$(module_getUrl olixsh)
     logger_info "Téléchargement de la mise à jour à l'adresse ${URL}"
 
     local OPTS="--tries=3 --timeout=30 --no-check-certificate"
     [[ ${OLIX_OPTION_VERBOSEDEBUG} == true ]] && OPTS="${OPTS} --debug"
     [[ ${OLIX_OPTION_VERBOSE} == false ]] && OPTS="${OPTS} --quiet"
-    OPTS="${OPTS} --output-document=/tmp/olixsh.tar.gz"
+    OPTS="${OPTS} --output-document=/tmp/olix.tar.gz"
     logger_debug "wget ${OPTS} ${URL}"
 
     wget ${OPTS} ${URL}
@@ -155,10 +154,11 @@ function command_update_olixsh_deploy()
 {
     logger_debug "command_update_olixsh_deploy ()"
 
-    file_extractArchive "/tmp/olixsh.tar.gz" "/tmp" "--gzip"
+    file_extractArchive "/tmp/olix.tar.gz" "/tmp" "--gzip"
     [[ $? -ne 0 ]] && return 1
 
-    local DIRTAR="/tmp/$(tar -tf /tmp/olixsh.tar.gz | grep -o '^[^/]\+' | sort -u)"
+    local DIRTAR="/tmp/$(tar -tf /tmp/olix.tar.gz | grep -o '^[^/]\+' | sort -u)"
+    logger_debug "TAR DIR SOURCE=${DIRTAR}"
 
     logger_info "Copie des fichiers à mettre à jour"
     cp ${DIRTAR}/completion/olixmain ${OLIX_ROOT}/completion > ${OLIX_LOGGER_FILE_ERR} 2>&1

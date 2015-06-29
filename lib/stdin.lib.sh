@@ -26,16 +26,19 @@ function stdin_read()
 # Lecture de la saisie d'un fichier
 # @param $1 : Message à afficher
 # @param $2 : Valeur par défaut
+# @param $3 : Si test fichier exist
 ##
 function stdin_readFile()
 {
-    local RESPONSE
+    local RESPONSE CHECK
     OLIX_STDIN_RETURN=$2
+    [[ $3 == false ]] && CHECK=false
     while true; do
         echo -e $1
         echo -en "[${CBLANC}${OLIX_STDIN_RETURN}${CVOID}] ? "
         read -e -p "" RESPONSE
         [[ ! -z ${RESPONSE} ]] && OLIX_STDIN_RETURN=${RESPONSE}
+        [[ ${CHECK} == false ]] && break;
         [[ -f ${OLIX_STDIN_RETURN} && -r ${OLIX_STDIN_RETURN} ]] && break
         logger_warning "Le fichier '${OLIX_STDIN_RETURN}' est absent"
     done
@@ -46,16 +49,19 @@ function stdin_readFile()
 # Lecture de la saisie d'un répertoire
 # @param $1 : Message à afficher
 # @param $2 : Valeur par défaut
+# @param $3 : Si test dossier exist
 ##
 function stdin_readDirectory()
 {
-    local RESPONSE
+    local RESPONSE CHECK
     OLIX_STDIN_RETURN=$2
+    [[ $3 == false ]] && CHECK=false
     while true; do
         echo -e $1
         echo -en "[${CBLANC}${OLIX_STDIN_RETURN}${CVOID}] ? "
         read -e -p "" RESPONSE
         [[ ! -z ${RESPONSE} ]] && OLIX_STDIN_RETURN=${RESPONSE}
+        [[ ${CHECK} == false ]] && break;
         [[ -d ${OLIX_STDIN_RETURN} ]] && break
         logger_warning "Le répertoire '${OLIX_STDIN_RETURN}' est inaccessible"
     done

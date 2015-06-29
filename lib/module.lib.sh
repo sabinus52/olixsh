@@ -69,7 +69,7 @@ function module_download()
     local OPTS="--tries=3 --timeout=30 --no-check-certificate"
     [[ ${OLIX_OPTION_VERBOSEDEBUG} == true ]] && OPTS="${OPTS} --debug"
     [[ ${OLIX_OPTION_VERBOSE} == false ]] && OPTS="${OPTS} --quiet"
-    OPTS="${OPTS} --output-document=/tmp/olixmodule.tar.gz"
+    OPTS="${OPTS} --output-document=/tmp/olix.tar.gz"
     logger_debug "wget ${OPTS} ${URL}"
 
     wget ${OPTS} ${URL}
@@ -85,10 +85,10 @@ function module_deploy()
 {
     logger_debug "module_deploy ($1)"
 
-    file_extractArchive "/tmp/olixmodule.tar.gz" "${OLIX_ROOT}/${OLIX_MODULE_DIR}" "--gzip"
+    file_extractArchive "/tmp/olix.tar.gz" "${OLIX_ROOT}/${OLIX_MODULE_DIR}" "--gzip"
     [[ $? -ne 0 ]] && return 1
 
-    local DIRTAR=$(tar -tf /tmp/olixmodule.tar.gz | grep -o '^[^/]\+' | sort -u)
+    local DIRTAR=$(tar -tf /tmp/olix.tar.gz | grep -o '^[^/]\+' | sort -u)
     logger_info "Renommage de '${DIRTAR}' vers '$1'"
     mv ${OLIX_ROOT}/${OLIX_MODULE_DIR}/${DIRTAR} ${OLIX_ROOT}/${OLIX_MODULE_DIR}/$1 > ${OLIX_LOGGER_FILE_ERR} 2>&1
     [[ $? -ne 0 ]] && return 1
@@ -106,7 +106,7 @@ function module_installCompletion()
     module_removeCompletion $1
     [[ ! -r modules/$1/completion ]] && return 0
     logger_info "Installation du fichier de completion"
-    ln -s modules/$1/completion completion/$1 > ${OLIX_LOGGER_FILE_ERR} 2>&1
+    ln -s ../modules/$1/completion completion/$1 > ${OLIX_LOGGER_FILE_ERR} 2>&1
     return $?
 }
 
