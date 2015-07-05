@@ -36,6 +36,7 @@ if [[ $? -ne 0 ]]; then
     echo "Erreur lors du l'extraction de l'archive"
     rm -f ${TARBALL}
     exit 1
+fi
 rm -f ${TARBALL}
 
 # Installation
