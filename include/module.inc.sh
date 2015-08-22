@@ -126,7 +126,7 @@ function module_getUrl()
     [[ -f ${OLIX_MODULE_REPOSITORY_USER} ]] && RESULT=$(grep "^$1|" ${OLIX_MODULE_REPOSITORY_USER})
     [[ -z ${RESULT} ]] && RESULT=$(grep "^$1|" ${OLIX_MODULE_REPOSITORY})
     IFS='|' read MODULE URL LABEL < <(echo -e "${RESULT}")
-    IFS=':' read PROTOCOL URI < <(echo -e "${RESULT}")
+    IFS=':' read PROTOCOL URI < <(echo -e "${URL}")
     if [[ ${PROTOCOL} == "github" ]]; then
         logger_debug "GITHUB=https:${URI}"
         URL=$(curl -s https:${URI} | grep 'tarball_url' | cut -d\" -f4)
