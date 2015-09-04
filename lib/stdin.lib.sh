@@ -15,7 +15,7 @@ function stdin_read()
 {
     local RESPONSE
     OLIX_STDIN_RETURN=$2
-    echo -e $1
+    [[ -n $1 ]] && echo -e $1
     echo -en "[${CBLANC}${OLIX_STDIN_RETURN}${CVOID}] ? "
     read RESPONSE
     [[ ! -z ${RESPONSE} ]] && OLIX_STDIN_RETURN=${RESPONSE}
@@ -34,7 +34,7 @@ function stdin_readFile()
     OLIX_STDIN_RETURN=$2
     [[ $3 == false ]] && CHECK=false
     while true; do
-        echo -e $1
+        [[ -n $1 ]] && echo -e $1
         echo -en "[${CBLANC}${OLIX_STDIN_RETURN}${CVOID}] ? "
         read -e -p "" RESPONSE
         [[ ! -z ${RESPONSE} ]] && OLIX_STDIN_RETURN=${RESPONSE}
@@ -57,7 +57,7 @@ function stdin_readDirectory()
     OLIX_STDIN_RETURN=$2
     [[ $3 == false ]] && CHECK=false
     while true; do
-        echo -e $1
+        [[ -n $1 ]] && echo -e $1
         echo -en "[${CBLANC}${OLIX_STDIN_RETURN}${CVOID}] ? "
         read -e -p "" RESPONSE
         [[ ! -z ${RESPONSE} ]] && OLIX_STDIN_RETURN=${RESPONSE}
@@ -78,7 +78,7 @@ function stdin_readYesOrNo()
     local RESPONSE
     OLIX_STDIN_RETURN=$2
     while true; do
-        echo -en $1
+        [[ -n $1 ]] && echo -en $1
         if [[ ${OLIX_STDIN_RETURN} == true ]]; then
             echo -en " [${CBLANC}O/n${CVOID}] ? "
         else
@@ -108,7 +108,7 @@ function stdin_readPassword()
 {
     local RESPONSE
     OLIX_STDIN_RETURN=
-    echo -en "$1 ? "
+    [[ -n $1 ]] && echo -en "$1 ? "
     read -s RESPONSE
     echo
     OLIX_STDIN_RETURN=${RESPONSE}
@@ -124,7 +124,7 @@ function stdin_readDoublePassword()
     local RESPONSE1 RESPONSE2
     OLIX_STDIN_RETURN=
     while true; do
-        echo -e "$1"
+        [[ -n $1 ]] && echo -e "$1"
         echo -n "Mot de passe ? "
         read -s RESPONSE1
         echo
@@ -150,7 +150,7 @@ function stdin_readSelect()
 
     OLIX_STDIN_RETURN=$3
     while true; do
-        echo -e $1
+        [[ -n $1 ]] && echo -e $1
         echo -e "Choix : $2"
         echo -en "[${CBLANC}${OLIX_STDIN_RETURN}${CVOID}] ? "
         read RESPONSE
