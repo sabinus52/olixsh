@@ -13,13 +13,13 @@
 OLIX_CORE_SHELL_NAME="olixsh"
 # Lien vers l'interpréteur olixsh
 OLIX_CORE_SHELL_LINK="/usr/bin/olixsh"
+# Dossier de configuration
+OLIX_CORE_PATH_CONFIG="/etc/olixsh"
 
 
 ###
 # Dossiers
 ##
-# Emplacement de la configuration
-OLIX_CONFIG_DIR="conf"
 # Emplacement des modules installés
 OLIX_MODULE_DIR="modules"
 

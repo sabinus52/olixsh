@@ -39,12 +39,12 @@ function config_warning()
 
 
 ###
-# Retourne le nomm du fichier de configuration du module
+# Retourne le nom du fichier de configuration du module
 # @param $1 : Nom du module
 ##
 function config_getFilenameModule()
 {
-    echo -n "${OLIX_CONFIG_DIR}/$1.conf"
+    echo -n "${OLIX_CORE_PATH_CONFIG}/$1.conf"
 }
 
 
@@ -96,4 +96,30 @@ function config_loadConfigQuietModule()
     logger_info "Charge le fichier de configuration ${FILECONF}"
     source ${FILECONF}
     return $?
+}
+
+
+###
+# Affecte une valeur dans un paramètre du fichier de conf du module
+# @param $1 : Nom du module
+# @param $2 : Nom du paramètre
+# @param $3 : Valeur du paramètre
+##
+function config_setConfig()
+{
+    logger_debug "config_setConfig ($1, $2, $3)"
+
+    local FILECONF=$(config_getFilenameModule $1)
+    logger_debug "FILECONF=${FILECONF}"
+
+    if [[ ! -r ${FILECONF} ]]; then
+        echo "# Fichier de configuration du module APPWEB" > ${FILECONF} 2> ${OLIX_LOGGER_FILE_ERR}
+        [[ $? -ne 0 ]] && logger_critical
+    fi
+
+    if grep "^$2\s*=" ${FILECONF} > /dev/null; then
+        sed -i "s/^\($2\s*=\s*\).*\$/\1$3/" ${FILECONF}
+    else
+        echo "$2=$3" >> ${FILECONF}
+    fi
 }
