@@ -133,6 +133,7 @@ function command_install_olixsh()
     [[ $? -ne 0 ]] && echo && logger_warning "ATTENTION !!! Ces binaires sont requis pour le bon fonctionnement de oliXsh" && echo
 
     command_install_olixsh_createLinkShell
+    command_install_olixsh_createDirConfig
     command_install_olixsh_createFileCompletion
 
     echo -e "${CVERT}L'installation s'est terminé avec succès${CVOID}"
@@ -148,6 +149,19 @@ function command_install_olixsh_createLinkShell()
     logger_info "Création du lien ${OLIX_CORE_SHELL_LINK}"
     ln -sf $(pwd)/${OLIX_CORE_SHELL_NAME} ${OLIX_CORE_SHELL_LINK} > ${OLIX_LOGGER_FILE_ERR} 2>&1
     [[ $? -ne 0 ]] && logger_error "Impossible de créer le lien ${OLIX_CORE_SHELL_LINK}"
+}
+
+
+###
+# Créer le dossier où seront les fichiers de configuration par défaut /etc/olixsh
+##
+function command_install_olixsh_createDirConfig()
+{
+    logger_debug "command_install_olixsh_createDirConfig ()"
+    logger_info "Création du dossier de configuration ${OLIX_CORE_PATH_CONFIG}"
+    [[ -d ${OLIX_CORE_PATH_CONFIG} ]] && return
+    mkdir -p ${OLIX_CORE_PATH_CONFIG} > ${OLIX_LOGGER_FILE_ERR} 2>&1
+    [[ $? -ne 0 ]] && logger_error "Impossible de créer le dossier de configuration ${OLIX_CORE_PATH_CONFIG}"
 }
 
 

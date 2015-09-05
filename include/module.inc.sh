@@ -155,7 +155,7 @@ function module_execute()
             # Pour afficher des listes simple utile pour la complétion
             olixmod_list $@
         elif [[ "$1" == "init" ]]; then
-            module_initialize $@
+            olixmod_init $@
         else
             olixmod_main $@
         fi
@@ -206,6 +206,4 @@ function module_initialize()
         logger_info "Chargement du fichier de configuration ${OLIX_MODULE_FILECONF}"
         source ${OLIX_MODULE_FILECONF}
     fi
-
-    olixmod_init $@
 }

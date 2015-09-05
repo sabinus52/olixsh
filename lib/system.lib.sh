@@ -35,3 +35,27 @@ function system_whichBinaries ()
 }
 
 
+###
+# Returne si un utilisateur existe
+# @param $1 : Nom de l'utilisateur
+##
+function system_isUserExist()
+{
+    logger_debug "system_isUserExist ($1)"
+
+    cut -d : -f 1 /etc/passwd | grep ^$1$ > /dev/null && return 0
+    return 1
+}
+
+
+###
+# Returne si un groupe existe
+# @param $1 : Nom du groupe
+##
+function system_isGroupExist()
+{
+    logger_debug "system_isGroupExist ($1)"
+
+    cut -d : -f 1 /etc/group | grep ^$1$ > /dev/null && return 0
+    return 1
+}

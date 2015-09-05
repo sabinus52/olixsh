@@ -60,8 +60,8 @@ function core_checkIfOwner()
 ##
 function core_getOwner()
 {
-    logger_debug "system_getOwner (${OLIX_ROOT})"
-    echo $(stat -c %U ${OLIX_ROOT})
+    logger_debug "system_getOwner (${OLIX_CORE_PATH_CONFIG})"
+    echo $(stat -c %U ${OLIX_CORE_PATH_CONFIG})
 }
 
 

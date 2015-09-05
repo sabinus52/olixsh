@@ -31,15 +31,16 @@ function file_createFileExclude()
 # @param $2 : Chemin source (path | host+path)
 # @param $3 : Chemin destination (path | host+path)
 # @param $4 : Exclusion
+# @param $5 : Paramètres supplémentaires
 ##
 function file_synchronize()
 {
-    logger_debug "filesystem_synchronize ($1, $2, $3, $4)"
-    local FILE_EXCLUDE PARAM
-    FILE_EXCLUDE=$(core_makeTemp)
+    logger_debug "filesystem_synchronize ($1, $2, $3, $4, $5)"
+    local FILE_EXCLUDE=$(core_makeTemp)
+    local PARAM=$5
     file_createFileExclude "${FILE_EXCLUDE}" "$4"
 
-    [[ ${OLIX_OPTION_VERBOSE} == true ]] && PARAM="--progress"
+    [[ ${OLIX_OPTION_VERBOSE} == true ]] && PARAM="${PARAM} --progress"
     rsync ${PARAM} --rsh="ssh -p $1" --archive --compress --delete --exclude-from=${FILE_EXCLUDE} $2/ $3/ 2> ${OLIX_LOGGER_FILE_ERR}
     RET=$?
 
