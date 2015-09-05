@@ -119,7 +119,9 @@ function config_setConfig()
 
     if grep "^$2\s*=" ${FILECONF} > /dev/null; then
         sed -i "s/^\($2\s*=\s*\).*\$/\1$3/" ${FILECONF}
+        [[ $? -ne 0 ]] && logger_critical
     else
         echo "$2=$3" >> ${FILECONF}
+        [[ $? -ne 0 ]] && logger_critical
     fi
 }
