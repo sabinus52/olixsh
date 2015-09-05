@@ -42,7 +42,7 @@ function module_install()
     source $(module_getScript "$1")
     if [[ ${UPDATE} == false ]]; then
         stdout_print "Saisie des éléments de configuration du module ${CCYAN}$1" "${CBLANC}"
-        module_initialize
+        olixmod_init install
     fi
     BINARIES="${BINARIES} $(olixmod_require_binary)"
 
