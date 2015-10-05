@@ -28,7 +28,9 @@ olixcmd_usage()
     echo
     echo -e "Mise à jour des modules oliXsh"
     echo
-    echo -e "${CBLANC} Usage : ${CVIOLET}$(basename ${OLIX_ROOT_SCRIPT}) ${CVERT}update ${CJAUNE}module${CVOID}"
+    echo -e "${CBLANC} Usage : ${CVIOLET}$(basename ${OLIX_ROOT_SCRIPT}) ${CVERT}update ${CJAUNE}[module] [--all]${CVOID}"
+    echo
+    echo -e "${CBLANC} --all${CVOID} : Tout mettre à jour"
     echo
     echo -e "${CJAUNE}Liste des MODULES disponibles${CVOID} :"
     echo -e "${Cjaune} olix ${CVOID}        : Mise à jour de oliXsh"
@@ -61,14 +63,22 @@ olixcmd_main()
 {
     logger_debug "command_update__olixcmd_main ($@)"
     local MODULE=$1
+    local I
 
     # Affichage de l'aide
     [ $# -lt 1 ] && olixcmd_usage && core_exit 1
     [[ "$1" == "help" ]] && olixcmd_usage && core_exit 0
 
     case ${MODULE} in
-        olix) command_update_olixsh;;
-        *)    command_update_module $1;;
+        --all)  logger_info "Mise à jour de oliXsh"
+                command_update_olixsh
+                for I in $(module_getListInstalled); do
+                    logger_info "Mise à jour de ${I}"
+                    command_update_module ${I}
+                done
+                ;;
+        olix)   command_update_olixsh;;
+        *)      command_update_module $1;;
     esac
 }
 
