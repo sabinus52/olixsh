@@ -13,7 +13,7 @@ _olixsh()
     CUR="${COMP_WORDS[COMP_CWORD]}"
     PREV="${COMP_WORDS[COMP_CWORD-1]}"
     FIRST=
-    LST_OPTS="--help --debug --verbose --no-warnings --version"
+    LST_OPTS="--help --debug --verbose --no-warnings --no-color --version"
     LST_CMDS="install update remove"
     LST_MODS=$(${OLIX_ROOT_COMP}/olixsh update --list)
 

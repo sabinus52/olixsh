@@ -7,6 +7,31 @@
 
 
 ###
+# Couleurs
+##
+if [[ ${OLIX_OPTION_COLOR} == true ]]; then
+    Cgris='\e[0;30m'
+    CGRIS='\e[1;30m'
+    Crouge='\e[0;31m'
+    CROUGE='\e[1;31m'
+    Cvert='\e[0;32m'
+    CVERT='\e[1;32m'
+    Cjaune='\e[0;33m'
+    CJAUNE='\e[1;33m'
+    Cbleu='\e[0;34m'
+    CBLEU='\e[1;34m'
+    Cviolet='\e[0;35m'
+    CVIOLET='\e[1;35m'
+    Ccyan='\e[0;36m'
+    CCYAN='\e[1;36m'
+    Cblanc='\e[0;37m'
+    CBLANC='\e[1;37m'
+    CVOID='\e[0;0m'
+fi
+
+
+
+###
 # Retourne le padding d'un texte avec une taille fixe complétée par des caratères
 # @param $1 : Texte de début pour le clacul du padding
 # @param $2 : Taille de la chaine
@@ -50,6 +75,7 @@ function stdout_printUsage()
     echo -en "${CBLANC}  --verbose|-v       ${CVOID} : "; echo "Mode verbeux."
     echo -en "${CBLANC}  --debug|-d         ${CVOID} : "; echo "Mode debug très verbeux."
     echo -en "${CBLANC}  --no-warnings      ${CVOID} : "; echo "Désactive les messages d'alerte."
+    echo -en "${CBLANC}  --no-color         ${CVOID} : "; echo "Désactive les messages en couleur."
     echo
     echo -e "${CJAUNE}COMMANDS${CVOID}"
     command_printList
