@@ -99,7 +99,7 @@ function logger_print()
         info)       echo -e "${Ccyan}${MESSAGE}${CVOID}" >&2;;
         warning)    echo -e "${Cjaune}${MESSAGE}${CVOID}" >&2;;
         err)        echo -e "${Crouge}${MESSAGE}${CVOID}" >&2;;
-        crit)       echo -e "${Crouge}${MESSAGE}${CVOID}" >&2;;
+        crit)       echo -e "${CROUGE}${MESSAGE}${CVOID}" >&2;;
     esac
 }
 
@@ -135,7 +135,7 @@ function logger_warning()
     if [[ "${OLIX_LOGGER_LEVEL}" == "debug" ]]\
     || [[ "${OLIX_LOGGER_LEVEL}" == "info" ]]\
     || [[ "${OLIX_LOGGER_LEVEL}" == "warning" ]]; then
-        logger_log "warning" "$@"
+        logger_log "warning" "WARNING: $@"
     fi
 }
 
@@ -149,10 +149,10 @@ function logger_error()
     local ERRFILE
     if [[ -s ${OLIX_LOGGER_FILE_ERR} ]]; then
         ERRFILE=$(cat ${OLIX_LOGGER_FILE_ERR})
-        logger_log "err" "${ERRFILE}"
+        logger_log "err" "ERROR: ${ERRFILE}"
         type "report_error" >/dev/null 2>&1 && report_error "${ERRFILE}"
     else
-        logger_log "err" "$@"
+        logger_log "err" "ERROR: $@"
         type "report_error" >/dev/null 2>&1 && report_error "$@"
     fi
 }
@@ -168,10 +168,10 @@ function logger_critical()
     local ERRFILE
     if [[ -s ${OLIX_LOGGER_FILE_ERR} ]]; then
         ERRFILE=$(cat ${OLIX_LOGGER_FILE_ERR})
-        logger_log "crit" "${ERRFILE}"
+        logger_log "crit" "CRITICAL: ${ERRFILE}"
         type "report_error" >/dev/null 2>&1 && report_error "${ERRFILE}"
     else
-        logger_log "crit" "$@"
+        logger_log "crit" "CRITICAL: $@"
         type "report_error" >/dev/null 2>&1 && report_error "$@"
     fi
     core_exit 1 "$@"

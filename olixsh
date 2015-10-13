@@ -39,7 +39,6 @@ source include/constant.inc.sh
 source include/core.inc.sh
 source include/logger.inc.sh
 source include/config.inc.sh
-source include/stdout.inc.sh
 source include/command.inc.sh
 source include/module.inc.sh
 
@@ -66,10 +65,14 @@ while [[ $# -ge 1 ]]; do
         --no-warnings)
             OLIX_OPTION_WARNINGS=false
             ;;
+        --no-color)
+            OLIX_OPTION_COLOR=false
+            ;;
         -h|--help)
             OLIX_OPTION_HELP=true
             ;;
         --version)
+            source include/stdout.inc.sh
             stdout_printVersion
             core_exit 0
             ;;
@@ -85,6 +88,9 @@ while [[ $# -ge 1 ]]; do
     esac
     shift
 done
+
+source include/stdout.inc.sh
+
 
 logger_info "Version : ${OLIX_VERSION}"
 logger_debug "OLIX_ROOT=${OLIX_ROOT}"

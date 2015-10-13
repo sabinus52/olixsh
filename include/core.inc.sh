@@ -81,6 +81,12 @@ function core_checkInstall()
         logger_warning "oliXsh n'a pas été installé correctement. Relancer le script './olixsh install olix'"
         echo && return 1
     fi
+
+    logger_info "Vérification de la présence de dossier de configuration ${OLIX_CORE_PATH_CONFIG}"
+    if [[ ! -d ${OLIX_CORE_PATH_CONFIG} ]]; then
+        logger_warning "${OLIX_CORE_PATH_CONFIG} absent"
+        logger_critical "oliXsh n'a pas été installé correctement. Relancer le script './olixsh install olix'"
+    fi
 }
 
 

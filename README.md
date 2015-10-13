@@ -68,6 +68,23 @@ nom_du_module|url_de_téléchargement_du_module|intitulé_du_module
 *Les urls http ou https doivent pointer vers un fichier en `.tar.gz`*
 
 
+Tout mettre à jour automatiquement
+----------------------------------
+
+Exécution du script pour tout mettre à jour (oliXsh + tous les modules installés)
+```
+olixsh update --all
+```
+
+Cette commande peut être mise dans un cron.
+Définir un mail pour être alerté lors d'un problème.
+Exemple de configuration du cron :
+```
+MAILTO=email@domain.tld
+52 02 * * 0   /opt/olixsh/olixsh --no-warnings update --all > /dev/null
+```
+
+
 Aide
 ----
 
