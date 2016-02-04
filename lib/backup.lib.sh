@@ -210,7 +210,7 @@ function backup_directory()
     stdout_printMessageReturn $? "Archivage du dossier" "$(filesystem_getSizeFileHuman ${FILEBCK})" "$((SECONDS-START))"
     [[ $? -ne 0 ]] && logger_error && return 1
 
-    backup_finalize "${FILEBCK}" "${DIRBCK}" "${COMPRESS}" "${PURGE}" "dump-${BASE}-*" \
+    backup_finalize "${FILEBCK}" "${DIRBCK}" "${COMPRESS}" "${PURGE}" "backup-$(basename ${DIR})-*" \
         "${FTP}" "${FTP_HOST}" "${FTP_USER}" "${FTP_PASS}" "${FTP_PATH}"
 
     return $?
