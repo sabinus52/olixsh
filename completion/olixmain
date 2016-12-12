@@ -5,60 +5,70 @@
 # @author Olivier <sabinus52@gmail.com>
 ##
 
-_olixsh() 
+_olixsh()
 {
-    local I CUR PREV FIRST 
-    local LST_OPTS LST_CMDS LST_MODS
+    local I CURRENT PREVIOUS
+    local COMMAND0 PARAM1 PARAM2 PARAM3 PARAM4 PARAM5
+    local LST_OPTIONS LST_CMDMODS
     COMPREPLY=()
-    CUR="${COMP_WORDS[COMP_CWORD]}"
-    PREV="${COMP_WORDS[COMP_CWORD-1]}"
-    FIRST=
-    LST_OPTS="--help --debug --verbose --no-warnings --no-color --version"
-    LST_CMDS="install update remove"
-    LST_MODS=$(${OLIX_ROOT_COMP}/olixsh update --list)
+    CURRENT="${COMP_WORDS[COMP_CWORD]}"
+    PREVIOUS="${COMP_WORDS[COMP_CWORD-1]}"
+    LST_OPTIONS="--help --debug --verbose --no-warnings --no-color --version"
+    LST_CMDMODS=$(${OLIX_ROOT_COMP}/olixsh --list)
 
     # Recherche quel est le module ou la commande utilisé
     for I in ${COMP_WORDS[*]}; do
-        [[ -n ${FIRST} ]] && break
-        if [[ ${LST_CMDS} =~ (^|[[:space:]])"${I}"($|[[:space:]]) ]] ; then
-            FIRST=${I}
-        elif [[ ${LST_MODS} =~ (^|[[:space:]])"${I}"($|[[:space:]]) ]]; then
-            FIRST=${I}
-        fi
+        [[ ${LST_OPTIONS} =~ (^|[[:space:]])"${I}"($|[[:space:]]) ]] && continue
+        [[ "$I" == "$CURRENT" ]] && continue
+        [[ -z ${COMMAND0} ]] && COMMAND0=${I} && continue
+        [[ -z ${PARAM1} ]] && PARAM1=${I} && continue
+        [[ -z ${PARAM2} ]] && PARAM2=${I} && continue
+        [[ -z ${PARAM3} ]] && PARAM3=${I} && continue
+        [[ -z ${PARAM4} ]] && PARAM4=${I} && continue
+        [[ -z ${PARAM5} ]] && PARAM5=${I} && continue
     done
 
     # Si commande ou module trouvé alors on propose la completion lié à cette commande
-    if [[ -n ${FIRST} ]]; then
-        case "${FIRST}" in
+    if [[ -n ${PARAM1} ]]; then
+        case "${PARAM1}" in
             install)
-                [[ ${PREV} != ${FIRST} ]] && return 0
-                COMPREPLY=( $(compgen -W "$(${OLIX_ROOT_COMP}/olixsh install --list --with-olix)" -- ${CUR}) )
+                [[ ${PREVIOUS} != ${PARAM1} ]] && return 0
+                COMPREPLY=( $(compgen -W "$(${OLIX_ROOT_COMP}/olixsh install --list)" -- ${CURRENT}) )
                 ;;
             update)
-                [[ ${PREV} != ${FIRST} ]] && return 0
-                COMPREPLY=( $(compgen -W "$(${OLIX_ROOT_COMP}/olixsh update --list --with-olix)" -- ${CUR}) )
+                [[ ${PREVIOUS} != ${PARAM1} ]] && return 0
+                COMPREPLY=( $(compgen -W "$(${OLIX_ROOT_COMP}/olixsh update --list)" -- ${CURRENT}) )
                 ;;
             remove)
-                [[ ${PREV} != ${FIRST} ]] && return 0
-                COMPREPLY=( $(compgen -W "$(${OLIX_ROOT_COMP}/olixsh remove --list)" -- ${CUR}) )
+                [[ ${PREVIOUS} != ${PARAM1} ]] && return 0
+                COMPREPLY=( $(compgen -W "$(${OLIX_ROOT_COMP}/olixsh remove --list)" -- ${CURRENT}) )
+                ;;
+            setcfg)
+                [[ -n ${PARAM3} ]] && return 0
+                if [[ -n ${PARAM2} ]]; then
+                    local TEMP=$(${OLIX_ROOT_COMP}/olixsh setcfg ${PARAM2} --list)
+                    [[ -z ${TEMP} ]] && return 0
+                    COMPREPLY=( $(compgen -W "${TEMP}" -- ${CURRENT}) ) && return 0
+                fi
+                COMPREPLY=( $(compgen -W "$(${OLIX_ROOT_COMP}/olixsh setcfg --list)" -- ${CURRENT}) )
                 ;;
             *)
-                if [[ -r ${OLIX_ROOT_COMP}/completion/${FIRST} ]]; then
-                    source ${OLIX_ROOT_COMP}/completion/${FIRST}
+                if [[ -r ${OLIX_ROOT_COMP}/completion/${PARAM1} ]]; then
+                    source ${OLIX_ROOT_COMP}/completion/${PARAM1}
                     _olixsh_module
                 fi
                 ;;
         esac
         return 0
     fi
-    
+
     # Completion si commande ou module non trouvé
-    case "${CUR}" in    
+    case "${CURRENT}" in
         -*)
-            COMPREPLY=( $(compgen -W "${LST_OPTS}" -- ${CUR}) )
+            COMPREPLY=( $(compgen -W "${LST_OPTIONS}" -- ${CURRENT}) )
             return 0
             ;;
-        *)  COMPREPLY=( $(compgen -W "${LST_CMDS} ${LST_MODS}" -- ${CUR}) )
+        *)  COMPREPLY=( $(compgen -W "${LST_CMDMODS}" -- ${CURRENT}) )
             return 0
             ;;
     esac

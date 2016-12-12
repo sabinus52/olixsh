@@ -1,49 +1,54 @@
 #!/usr/bin/env bash
 ###
-# Interpréteur olixsh
+# Interpréteur oliXsh
 # ==============================================================================
-# ------------------------------------------------------------------------------
 # @package olixsh
 # @author Olivier <sabinus52@gmail.com>
+# @link https://github.com/sabinus52/olixsh
 ##
 
 #set -e
+#set +bm
+shopt -s expand_aliases
+shopt -s extglob
 
 
 ###
-# Détermination où se trouve le framework pour s'y placer
+# Détermination où se trouve le framework
 ##
 if [ -L $0 ]; then
     OLIX_ROOT_SCRIPT=$(readlink $0)
 else
     OLIX_ROOT_SCRIPT=$0
 fi
-OLIX_ROOT=$(dirname $OLIX_ROOT_SCRIPT)
-cd ${OLIX_ROOT}
+cd $(dirname $OLIX_ROOT_SCRIPT)
+OLIX_ROOT=$(pwd)
+cd - > /dev/null
 
 
 ###
 # Version
 ##
-if [[ -r VERSION ]]; then
-    OLIX_VERSION=$(cat VERSION)
+if [[ -r $OLIX_ROOT/VERSION ]]; then
+    OLIX_VERSION=$(cat $OLIX_ROOT/VERSION)
 else
-    OLIX_VERSION="2.alpha"
+    OLIX_VERSION="3.alpha"
 fi
 
 
 ###
-# Chargement des librairies
+# Chargement des librairies requis
 ##
-source include/constant.inc.sh
-source include/core.inc.sh
-source include/logger.inc.sh
-source include/config.inc.sh
-source include/command.inc.sh
-source include/module.inc.sh
+source $OLIX_ROOT/core/constants.sh
+source $OLIX_ROOT/core/logger.sh
+source $OLIX_ROOT/core/core.sh
 
 
-logger_checkLogger
+###
+# Chargement des autres librairies
+##
+load "core/*.exec.sh"
+load "lib/*"
 
 
 ###
@@ -72,7 +77,6 @@ while [[ $# -ge 1 ]]; do
             OLIX_OPTION_HELP=true
             ;;
         --version)
-            source include/stdout.inc.sh
             stdout_printVersion
             core_exit 0
             ;;
@@ -83,37 +87,49 @@ while [[ $# -ge 1 ]]; do
             ;;
 
         *)
-            OLIX_ARGS="${OLIX_ARGS} $1"
+            [[ -z $OLIX_ARG1 ]] && OLIX_ARG1=$1
+            OLIX_ARGS="$OLIX_ARGS $1"
             ;;
     esac
     shift
 done
 
-source include/stdout.inc.sh
+# Activation des couleurs
+[[ $OLIX_OPTION_COLOR == true ]] && load "core/color.sh"
 
-
-logger_info "Version : ${OLIX_VERSION}"
-logger_debug "OLIX_ROOT=${OLIX_ROOT}"
-logger_debug "OLIX_ARGS=${OLIX_ARGS}"
+# Mode debug pour afficher les paramètres
+info "Version : $OLIX_VERSION"
+debug "OLIX_ROOT=$OLIX_ROOT"
+debug "OLIX_ARGS=$OLIX_ARGS"
 
 
 ###
 # Affichage de l'aide
 ##
-[[ ${OLIX_OPTION_HELP} == true ]] && stdout_printUsage && core_exit 0
-[[ -z ${OLIX_ARGS} ]] && stdout_printUsage && core_exit 0
+[[ -z $OLIX_ARGS && $OLIX_OPTION_LIST == true ]] && Command.execute.completion
+[[ -z $OLIX_ARGS ]] && Print.usage && die 0
 
 
-core_checkInstall ${OLIX_ARGS}
+###
+# Vérification d'Olix et chargement des paramètres
+##
+checkOlixsh $OLIX_ARGS
 
-if command_isExist ${OLIX_ARGS}; then
-    command_execute ${OLIX_ARGS}
-elif module_isInstalled ${OLIX_ARGS}; then
-    module_execute ${OLIX_ARGS}
+
+###
+# Execution de la commande ou du module
+##
+if Command.exists $OLIX_ARG1; then
+    Command.execute $OLIX_ARGS
+elif Module.installed $OLIX_ARG1; then
+    Module.execute $OLIX_ARGS
 else
-    stdout_printNoCommandNoModule ${OLIX_ARGS}
-    stdout_printUsage
+    Print.usage
+    warning "La commande ou le module \"$OLIX_ARG1\" n'existe pas"
 fi
 
 
-core_exit 0
+###
+# Sortie sans erreur
+##
+die 0
