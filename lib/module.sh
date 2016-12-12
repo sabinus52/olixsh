@@ -55,6 +55,7 @@ function Module.exists()
 ##
 function Module.installed()
 {
+    [[ "$1" == "olixsh" ]] && return 0
     [[ -r $(Module.script $1) ]] && return 0
     return 1
 }

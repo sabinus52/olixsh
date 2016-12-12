@@ -114,6 +114,7 @@ debug "OLIX_ARGS=$OLIX_ARGS"
 # Vérification d'Olix et chargement des paramètres
 ##
 checkOlixsh $OLIX_ARGS
+Config.load 'olixsh'
 
 
 ###

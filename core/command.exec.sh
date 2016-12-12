@@ -64,6 +64,9 @@ function Command.execute()
                 olixsh) debug "EXEC commands/update-olixsh.sh"
                         source $OLIX_ROOT/commands/update-olixsh.sh
                         ;;
+                myrepo) debug "EXEC commands/update-myrepo.sh"
+                        source $OLIX_ROOT/commands/update-myrepo.sh
+                        ;;
                 *)      debug "EXEC commands/update-module.sh $2"
                         source $OLIX_ROOT/commands/update-module.sh $2
                         ;;
@@ -105,7 +108,7 @@ function Command.execute.completion()
             Module.all.available
             ;;
         update)
-            echo "olixsh"
+            echo "olixsh myrepo"
             Module.all.installed
             ;;
         remove)

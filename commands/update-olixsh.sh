@@ -89,8 +89,16 @@ cp $DIRTAR/README.md $OLIX_ROOT > ${OLIX_LOGGER_FILE_ERR} 2>&1
 [[ $? -ne 0 ]] && critical "Impossible de déployer la mise à jour oliXsh"
 
 
+# Dépot personnalisé des modules
+if [[ -n $OLIX_MODULE_REPOSITORY_URL ]]; then
+    info "Téléchargement et installation du fichier personnalisé des dépots des modules"
+    Module.install.myrepository
+    [[ $? -ne 0 ]] && critical "Impossible de télécharger le fichier personnalisé des dépots des modules"
+fi
+
+
 
 ###
 # FIN
 ##
-echo -e "${CVERT}La mise àjour oliXsh s'est terminée avec succès${CVOID}"
+echo -e "${CVERT}La mise à jour oliXsh s'est terminée avec succès${CVOID}"

@@ -153,6 +153,24 @@ function Module.install.completion()
 
 
 ###
+# Installe le fichier de dépot utilisateur
+##
+function Module.install.myrepository()
+{
+    debug "Module.install.myrepository ()"
+
+    local OPTS="--tries=3 --timeout=30 --no-check-certificate"
+    [[ $OLIX_OPTION_VERBOSEDEBUG == true ]] && OPTS="$OPTS --debug"
+    [[ $OLIX_OPTION_VERBOSE == false ]] && OPTS="$OPTS --quiet"
+    OPTS="$OPTS --output-document=/tmp/olix.tar.gz"
+    debug "wget ${OPTS} --output-document=${OLIX_MODULE_REPOSITORY_USER} ${OLIX_MODULE_REPOSITORY_URL}"
+
+    wget $OPTS --output-document=$OLIX_MODULE_REPOSITORY_USER $OLIX_MODULE_REPOSITORY_URL
+    return $?
+}
+
+
+###
 # Supprime le fichier de completion
 # @param $1 : Nom du module
 ##
