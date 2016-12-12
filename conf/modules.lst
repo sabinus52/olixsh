@@ -1,9 +1,9 @@
 ###
 # DON'T TOUCH
 ##
-olixsh|github://api.github.com/repos/sabinus52/olixsh2/releases/latest|
-ubuntu|github://api.github.com/repos/sabinus52/olixshmodule-ubuntu/releases/latest|Installation et gestion des packages Ubuntu
-debian|github://api.github.com/repos/sabinus52/olixshmodule-debian/releases/latest|Installation et gestion des packages Debian
-mysql|github://api.github.com/repos/sabinus52/olixshmodule-mysql/releases/latest|Utilitaires pour les bases mysql
-postgres|github://api.github.com/repos/sabinus52/olixshmodule-postgres/releases/latest|Utilitaires pour les bases postgres
-webapp|github://api.github.com/repos/sabinus52/olixshmodule-webapp/releases/latest|Gestion des applications web
+olixsh|https://github.com/sabinus52/olixsh/archive/version2.tar.gz|
+ubuntu|https://github.com/sabinus52/olixshmodule-ubuntu/archive/version2.tar.gz|Installation et gestion des packages Ubuntu
+debian|https://github.com/sabinus52/olixshmodule-debian/archive/version2.tar.gz|Installation et gestion des packages Debian
+mysql|https://github.com/sabinus52/olixshmodule-mysql/archive/version2.tar.gz|Utilitaires pour les bases mysql
+postgres|https://github.com/sabinus52/olixshmodule-postgres/archive/version2.tar.gz|Utilitaires pour les bases postgres
+webapp|https://github.com/sabinus52/olixshmodule-webapp/archive/version2.tar.gz|Gestion des applications web

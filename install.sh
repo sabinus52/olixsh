@@ -1,10 +1,10 @@
 ###
 # Installation automatique d'oliXsh
-# Usage : curl -s https://raw.githubusercontent.com/sabinus52/olixsh2/master/install.sh | bash -s -- [DOSSIER_DE_DESTINATION]
+# Usage : curl -s https://raw.githubusercontent.com/sabinus52/olixsh/version2/install.sh | bash -s -- [DOSSIER_DE_DESTINATION]
 ##
 
 # Paramètres
-REPOSITORY="https://github.com/sabinus52/olixsh2/archive/master.tar.gz"
+REPOSITORY="https://github.com/sabinus52/olixsh/version2/master.tar.gz"
 TARBALL="/tmp/olixsh.tar.gz"
 DIRNAME="olixsh"
 DESTINATION="/opt"
