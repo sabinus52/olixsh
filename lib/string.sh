@@ -122,6 +122,17 @@ function String.explode.value()
     #echo ${PARAM[1]}
 }
 
+###
+# Extrait le paramètre d'une chaine avec un délimiteur (param=value)
+# @param $2 : Délimiteur
+##
+function String.explode.param()
+{
+    local DELIMITER="="
+    [[ -n $2 ]] && DELIMITER=$2
+    echo $(String.explode $1 1 "$DELIMITER")
+}
+
 
 ###
 # Retourne si un élément est contenu dans une liste

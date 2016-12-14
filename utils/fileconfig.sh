@@ -26,6 +26,40 @@ function Fileconfig.install()
 
 
 ###
+# Met à jour le fichier de configuration
+# @param $1 : Nom du module
+##
+function Fileconfig.update()
+{
+    debug "Fileconfig.update ($1)"
+    local PARAM REPLACE
+    local ERROR=0
+    local FILECONF=$(Config.fileName $1)
+    local TEMPLATE=$(Config.template $1)
+    local FILEDIFF=$(System.file.temp)
+    info "Mise à jour du fichier de configuration"
+
+    # Sauvegarde le fichier de conf
+    cp $FILECONF $FILECONF.bak 2> ${OLIX_LOGGER_FILE_ERR} || return 1
+    # Calcule les différences
+    diff -n $TEMPLATE $FILECONF > $FILEDIFF
+
+    # Met à jour le fichier de configuration
+    cp $TEMPLATE $FILECONF 2> ${OLIX_LOGGER_FILE_ERR} || return 1
+
+    # Remet les valeurs personnalisés
+    for I in $(grep '^OLIX_.*' $FILEDIFF); do
+        PARAM=$(String.explode.param $I)
+        debug "Param updated --> $I"
+        REPLACE=$(echo $I | sed 's/\//\\\//g')
+        sed -i "s/^\($PARAM\s*=\s*.*\)\$/$REPLACE/" $FILECONF 2> ${OLIX_LOGGER_FILE_ERR}
+        [[ $? -ne 0 ]] && ERROR=1
+    done
+    return $ERROR
+}
+
+
+###
 # Affecte une valeur à un paramètre du fichier de configuration
 # @param $1 : Nom du module
 # @param $2 : Nom du paramètre

@@ -4,7 +4,6 @@
 # @package olixsh
 # @author Olivier <sabinus52@gmail.com>
 # @TODO initialisation du module après son installation
-# @TODO mise à jour du fichier de config dans /etc/olix
 ##
 
 
