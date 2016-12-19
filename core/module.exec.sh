@@ -21,8 +21,8 @@ function Module.execute()
     debug "Module.execute ($1) -> ${SCRIPT} avec ARGS : $@"
     info "Execution du module $OLIX_MODULE_NAME"
 
-    debug "load $SCRIPT"
-    source $SCRIPT
+    # Chargement des librairie et conf principale
+    load "modules/$OLIX_MODULE_NAME/conf/*.sh"
     source $(Config.template $OLIX_MODULE_NAME)
     shift
 
@@ -44,9 +44,6 @@ function Module.execute()
 function Module.execute.usage()
 {
     debug "Module.execute.usage ($1)"
-
-    # Chargement de la fichier contenant l'usage
-    source $(Module.script.usage $OLIX_MODULE_NAME)
 
     local ACTION="main"
     [[ "$1" != "help" && "$1" != "" ]] && ACTION=$1
@@ -106,6 +103,11 @@ function Module.execute.action()
     fi
     # Chargement du fichier de configuration
     Config.load $OLIX_MODULE_NAME
+    # Chargement du parsing des paramètres
+    if Function.exists "olixmodule_${OLIX_MODULE_NAME}_params_parse"; then
+        info "Parsind des paramètres"
+        olixmodule_${OLIX_MODULE_NAME}_params_parse "${ACTION}" $@
+    fi
     # Chargement du début du script
     if Function.exists "olixmodule_${OLIX_MODULE_NAME}_include_begin"; then
         info "Début du script"

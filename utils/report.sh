@@ -70,6 +70,8 @@ function Report.terminate()
 {
     debug "Report.terminate ($1)"
 
+    [[ -z $OLIX_REPORT_FILENAME ]] && return
+
     Report.print.footer
 
     # Purge des anciens rapports
@@ -113,6 +115,11 @@ function Report.warning()
     return 0
 }
 
+
+
+function Report.print.header() { echo > /dev/null; }
+
+function Report.print.footer() { echo > /dev/null; }
 
 function Report.print.head1() { echo > /dev/null; }
 

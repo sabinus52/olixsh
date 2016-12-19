@@ -50,7 +50,7 @@ alias File.ext='File.extension'
 
 
 ###
-# Propriétaire et gourpe d'appartenance du fichier
+# Propriétaire et groupe d'appartenance du fichier
 ##
 function File.owner()
 {

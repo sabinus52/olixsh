@@ -99,6 +99,17 @@ function String.digit()
 
 
 ###
+# Test une chaine de caractère
+# @param $2 : Expression régulière
+##
+function String.test()
+{
+    [[ $1 =~ ^$2$ ]] && return 0
+    return 1
+}
+
+
+###
 # Extrait une chaine avec un délimiteur
 # @param $2 : Indice du champs à extraire
 # @param $3 : Délimiteur

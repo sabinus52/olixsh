@@ -20,15 +20,6 @@ alias Module.script='Module.script.main'
 
 
 ###
-# Retourne le nom du script d'usage d'un module
-##
-function Module.script.usage()
-{
-    echo -n "$OLIX_MODULE_PATH/$1/conf/usage.sh"
-}
-
-
-###
 # Retourne le nom du script de l'action d'un module
 # @param $2 : Action du module
 ##

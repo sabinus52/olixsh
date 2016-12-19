@@ -98,6 +98,7 @@ function Logger.debug()
     if [[ "$OLIX_LOGGER_LEVEL" == "debug" ]]; then
         Logger.log "debug" "DEBUG: $@"
     fi
+    return 0
 }
 alias debug='Logger.debug'
 
@@ -111,6 +112,7 @@ function Logger.info()
     || [[ "$OLIX_LOGGER_LEVEL" == "info" ]]; then
         Logger.log "info" "$@"
     fi
+    return 0
 }
 alias info='Logger.info'
 
@@ -126,6 +128,7 @@ function Logger.warning()
         Logger.log "warning" "WARNING: $@"
         Function.exists "Report.warning" && Report.warning "$@"
     fi
+    return 0
 }
 alias warning='Logger.warning'
 
@@ -145,6 +148,7 @@ function Logger.error()
         Logger.log "err" "ERROR: $@"
         Function.exists "Report.error" && Report.error "$@"
     fi
+    return 0
 }
 alias error='Logger.error'
 

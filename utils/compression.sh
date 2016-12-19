@@ -8,6 +8,33 @@
 
 
 ###
+# Retourne l'extension du compression d'un TAR
+# @param $1 : Mode de compression
+##
+function Compression.tar.extension()
+{
+    case $(String.lower $1) in
+        bz|bz2) echo -n ".tbz";;
+        gz)     echo -n ".tgz";;
+        *)      echo -n ".tar";;
+    esac
+}
+
+
+###
+# Retourne l'option de compression d'un TAR
+# @param $1 : Mode de compression
+##
+function Compression.tar.mode()
+{
+    case $(String.lower $1) in
+        bz|bz2) echo -n "--bzip2";;
+        gz)     echo -n "--gzip";;
+    esac
+}
+
+
+###
 # Archive un repertoire
 # @param $1 : Nom du repertoire
 # @param $2 : Nom de l'archive

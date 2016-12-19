@@ -86,6 +86,11 @@ function Module.install()
         debug "which $I"
         ! System.binary.exists $I && warning "Le binaire \"$I\" n'est pas présent"
     done
+
+    # Traitement à faire après l'installation
+    if [[ $UPDATE == false ]]; then
+        Function.exists "olixmodule_$1_after_install" && olixmodule_$1_after_install
+    fi
 }
 
 

@@ -35,8 +35,8 @@ OLIX_BACKUP_FTP_PATH=
 ###
 # Initialisation du backup
 # @param $1  : Emplacement du backup.
-# @param $3  : Compression
-# @param $4  : Rétention pour la purge
+# @param $2  : Compression
+# @param $3  : Rétention pour la purge
 ##
 function Backup.initialize()
 {
@@ -47,6 +47,27 @@ function Backup.initialize()
     OLIX_BACKUP_COMPRESS=$2
     [[ -z $3 ]] && return
     OLIX_BACKUP_TTL=$3
+}
+
+
+###
+# Initialisation du backup avec FTP
+# @param $1  : Valeur du FTP
+# @param $2  : Host du FTP
+# @param $3  : Port du FTP
+# @param $4  : User du FTP
+# @param $5  : Pass du FTP
+# @param $6  : Chemin du FTP
+##
+function Backup.initialize.ftp()
+{
+    debug "Backup.initialize.ftp ($1, $2, $3, $4, $5, $6)"
+    OLIX_BACKUP_FTP=$1
+    OLIX_BACKUP_FTP_HOST=$2
+    OLIX_BACKUP_FTP_PORT=$3
+    OLIX_BACKUP_FTP_USER=$4
+    OLIX_BACKUP_FTP_PASS=$5
+    OLIX_BACKUP_FTP_PATH=$6
 }
 
 
@@ -116,8 +137,8 @@ function Backup.ftp.synchronize()
 {
     debug "Backup.ftp.synchronize ()"
 
-    [[ -z $1 ]] && return 0
-    [[ $1 == false ]] && return 0
+    [[ -z $OLIX_BACKUP_FTP ]] && return 0
+    [[ $OLIX_BACKUP_FTP == false ]] && return 0
 
     Print.head2 "Synchronisation avec le serveur FTP %s" "${OLIX_BACKUP_FTP_HOST}"
     START=$SECONDS
@@ -180,10 +201,10 @@ function utils_backup_ftp()
     debug "utils_backup_ftp ()"
     local START=$SECONDS
 
-    [[ -z $1 ]] && warning "Pas de transfert FTP configuré" && return 0
-    [[ $1 == false ]] && warning "Pas de transfert FTP configuré" && return 0
+    [[ -z $OLIX_BACKUP_FTP ]] && warning "Pas de transfert FTP configuré" && return 0
+    [[ $OLIX_BACKUP_FTP == false ]] && warning "Pas de transfert FTP configuré" && return 0
 
-    Ftp.put "$OLIX_BACKUP_FTP" "$OLIX_BACKUP_FTP_HOST" "$OLIX_BACKUP_FTP_USER" \
+    Ftp.put "$OLIX_BACKUP_FTP" "$OLIX_BACKUP_FTP_HOST" "$OLIX_BACKUP_FTP_USER" "$OLIX_BACKUP_FTP_PASS" \
             "$OLIX_BACKUP_FTP_PATH" "$OLIX_BACKUP_FILE"
 
     Print.result $? "Transfert vers le serveur de backup" "" "$((SECONDS-START))"
@@ -223,9 +244,9 @@ function utils_backup_purge()
 
     case $OLIX_BACKUP_TTL in
         LOG|log)
-            Filesystem.purge.standard $OLIX_BACKUP_PATH $OLIX_BACKUP_FILE_PREFIX $LIST_FILE_PURGED
+            Filesystem.purge.logarithmic $OLIX_BACKUP_PATH $OLIX_BACKUP_FILE_PREFIX $LIST_FILE_PURGED
             RET=$?;;
-        *)  
+        *)
             Filesystem.purge.standard $OLIX_BACKUP_PATH $OLIX_BACKUP_FILE_PREFIX $OLIX_BACKUP_TTL $LIST_FILE_PURGED
             RET=$?;;
     esac

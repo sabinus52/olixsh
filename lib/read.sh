@@ -177,3 +177,35 @@ function Read.choices()
         String.list.contains "$3" "$OLIX_FUNCTION_RETURN" && break
     done
 }
+
+
+###
+# Demande des infos d'un connexion distante
+# @param $1 : Host du serveur
+# @param $2 : Port du serveur
+# @param $3 : User du serveur
+# @return OLIX_RETURN_HOST : Host du serveur
+# @return OLIX_RETURN_PORT : Port du serveur
+# @return OLIX_RETURN_USER : User du serveur
+##
+function Read.connection()
+{
+    debug "Read.connection ($1, $2, $3)"
+    OLIX_RETURN_HOST=$1
+    OLIX_RETURN_PORT=$2
+    OLIX_RETURN_USER=$3
+
+    # Verifie si un cache existe pour éviter de resaisir
+    local FCACHE="/tmp/cache.$LOGNAME"
+    [[ -r $FCACHE ]] && source $FCACHE && debug $(cat $FCACHE)
+
+    Read.string "Host du serveur" $OLIX_RETURN_HOST
+    OLIX_RETURN_HOST=$OLIX_FUNCTION_RETURN
+    echo "OLIX_RETURN_HOST=$OLIX_RETURN_HOST" > $FCACHE
+    Read.digit "Port du serveur" $OLIX_RETURN_PORT
+    OLIX_RETURN_PORT=$OLIX_FUNCTION_RETURN
+    echo "OLIX_RETURN_PORT=$OLIX_RETURN_PORT" >> $FCACHE
+    Read.string "Utilisateur de connexion" $OLIX_RETURN_USER
+    OLIX_RETURN_USER=$OLIX_FUNCTION_RETURN
+    echo "OLIX_RETURN_USER=$OLIX_RETURN_USER" >> $FCACHE
+}
