@@ -77,10 +77,11 @@ while [[ $# -ge 1 ]]; do
             OLIX_OPTION_HELP=true
             ;;
         --version)
-            stdout_printVersion
-            core_exit 0
+            load "core/color.sh"
+            Print.version
+            die 0
             ;;
-        
+
         # Paramètres communes mais cachés pour afficher des listes dans les commandes ou modules
         --list)
             OLIX_OPTION_LIST=true

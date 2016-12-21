@@ -30,7 +30,7 @@ function Logger.syslog()
     if [[ "${OLIX_LOGGER}" == "true" ]]; then
         /usr/bin/logger -t "oliXsh[$$]" -p "${OLIX_LOGGER_FACILITY}.${LEVEL}" -- "${LEVEL} * ${MESSAGE}"  
     fi
-    echo "${OLIX_SYSTEM_DATE} ${OLIX_SYSTEM_TIME} [${LEVEL}] ${MESSAGE}" >> ${OLIX_LOGGER_FILE}
+    #echo "${OLIX_SYSTEM_DATE} ${OLIX_SYSTEM_TIME} [${LEVEL}] ${MESSAGE}" >> ${OLIX_LOGGER_FILE}
 }
 
 

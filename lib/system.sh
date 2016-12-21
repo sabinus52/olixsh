@@ -82,7 +82,7 @@ function System.binary.exists()
 ##
 function System.file.temp()
 {
-    echo -n $(mktemp /tmp/olix.XXXXXXXXXX.tmp)
+    echo -n $(mktemp /tmp/olix.XXXXXXXXXX)
 }
 
 
@@ -128,6 +128,7 @@ function System.os.name()
     local I
     if System.binary.exists 'lsb_release'; then
         NAME=$(lsb_release -is 2>/dev/null | tr -d '"')
+        [[ "$NAME" == "SUSE LINUX" ]] && NAME="sles"
     elif File.exists '/etc/os-release'; then
         NAME=$(File.content.value '/etc/os-release' 'ID')
     else

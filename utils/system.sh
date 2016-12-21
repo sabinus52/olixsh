@@ -121,15 +121,26 @@ function System.partion.name()
 function System.partion.utilisation()
 {
     debug "System.partion.utilisation ($1)"
-    df /dev/disk/by-uuid/$1 | awk '{ print $5}' | tail -1
+    df /dev/disk/by-uuid/$1 | awk '{ print $5}' | tail -1 | tr -d '%'
 }
 
 ###
-# Retourne l'le type de système de fichier d'une partition
+# Retourne le type de système de fichier d'une partition
 # @param $1 : UUID
 ##
 function System.partion.fstype()
 {
     debug "System.partion.fstype ($1)"
     lsblk /dev/disk/by-uuid/$1 -o FSTYPE -n
+}
+
+
+###
+# Retourne le point de montage d'une partition
+# @param $1 : UUID
+##
+function System.partion.mount()
+{
+    debug "System.partion.mount ($1)"
+    lsblk /dev/disk/by-uuid/$1 -o MOUNTPOINT -n
 }
