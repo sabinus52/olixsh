@@ -1,71 +1,31 @@
 ###
-# Librairies des sorties d'affichage
+# Fonctions des sorties d'affichage et d'usage
 # ==============================================================================
 # @package olixsh
 # @author Olivier <sabinus52@gmail.com>
 ##
 
 
-###
-# Couleurs
-##
-if [[ ${OLIX_OPTION_COLOR} == true ]]; then
-    Cgris='\e[0;30m'
-    CGRIS='\e[1;30m'
-    Crouge='\e[0;31m'
-    CROUGE='\e[1;31m'
-    Cvert='\e[0;32m'
-    CVERT='\e[1;32m'
-    Cjaune='\e[0;33m'
-    CJAUNE='\e[1;33m'
-    Cbleu='\e[0;34m'
-    CBLEU='\e[1;34m'
-    Cviolet='\e[0;35m'
-    CVIOLET='\e[1;35m'
-    Ccyan='\e[0;36m'
-    CCYAN='\e[1;36m'
-    Cblanc='\e[0;37m'
-    CBLANC='\e[1;37m'
-    CVOID='\e[0;0m'
-fi
-
-
-
-###
-# Retourne le padding d'un texte avec une taille fixe complétée par des caratères
-# @param $1 : Texte de début pour le clacul du padding
-# @param $2 : Taille de la chaine
-# @param $3 : Caractère à compléter
-##
-function stdout_strpad()
-{
-    logger_debug "stdout_strpad ($1, $2, $3)"
-    local PAD=$(printf '%0.1s' "$3"{1..60})
-    printf '%*.*s' 0 $(($2 - ${#1} )) "${PAD}"
-}
-
 
 ###
 # Affiche la version
 ##
-function stdout_printVersion()
+function Print.version()
 {
-    logger_debug "stdout_printVersion ()"
     local VERSION
-    VERSION="Version ${CVERT}${OLIX_VERSION}${CVOID}"
-    echo -e "${CVIOLET}oliXsh${CVOID} ${VERSION}, for Linux"
+    VERSION="Version ${CVERT}$OLIX_VERSION${CVOID}"
+    echo -e "${CVIOLET}oliXsh${CVOID} $VERSION, for Linux"
     echo -e "Copyright (c) 2013, $(date '+%Y') Olivier (Sabinus52). All rights reserved."
-    echo -e "Link GitHub : ${Ccyan}https://github.com/sabinus52/olixsh2${CVOID}"
+    echo -e "Link GitHub : ${Ccyan}https://github.com/sabinus52/olixsh${CVOID}"
 }
 
 
 ###
 # Affiche l'usage de oliXsh
 ##
-function stdout_printUsage()
+function Print.usage()
 {
-    logger_debug "stdout_printUsage ()"
-    stdout_printVersion
+    Print.version
     echo
     echo -e "${CBLANC} Usage : ${CVIOLET}$(basename ${OLIX_ROOT_SCRIPT}) ${Ccyan}[OPTIONS] ${CJAUNE}COMMAND|MODULE ${Cjaune}[PARAMETER]${CVOID}"
     echo
@@ -78,20 +38,37 @@ function stdout_printUsage()
     echo -en "${CBLANC}  --no-color         ${CVOID} : "; echo "Désactive les messages en couleur."
     echo
     echo -e "${CJAUNE}COMMANDS${CVOID}"
-    command_printList
+    Print.commands
     echo
     echo -e "${CJAUNE}MODULES${CVOID}"
-    module_printListInstalled
+    local I
+    while read I; do
+        Print.usage.item $I "$(Module.label $I)"
+    done < <(Module.all.installed)
 }
 
 
 ###
-# Affiche l'erreur de module non trouvé
+# Affiche le menu des commands
 ##
-function stdout_printNoCommandNoModule()
+function Print.commands()
 {
-    logger_debug "stdout_printNoCommandNoModule ($1)"
-    logger_warning "La commande ou le module \"$1\" n'existe pas"
+    echo -e "${Cjaune} install ${CVOID}     : Installation des modules oliXsh"
+    echo -e "${Cjaune} update  ${CVOID}     : Mise à jour des modules oliXsh "
+    echo -e "${Cjaune} remove  ${CVOID}     : Suppression d'un module oliXsh "
+}
+
+
+###
+# Affiche un item d'usage 
+##
+function Print.usage.item()
+{
+    local PAD=10
+    [[ -n $3 ]] && PAD=$3
+    echo -en "${Cjaune} $1 ${CVOID} "
+    String.pad "$1" $PAD " "
+    echo " : $2"
 }
 
 
@@ -100,15 +77,15 @@ function stdout_printNoCommandNoModule()
 # @param $1     : Message
 # @param $2..$9 : Valeurs à inclure dans le message
 ##
-function stdout_printHead1()
+function Print.head1()
 {
     local MSG=$1
     shift
-    logger_debug "stdout_printHead1 ($MSG, $*)"
+    debug "Print.head1 ($MSG, $*)"
     echo
     echo -e "${CVIOLET}$(printf "$MSG" "${CCYAN}$1${CVIOLET}" "${CCYAN}$2${CVIOLET}" "${CCYAN}$3${CVIOLET}")${CVOID}"
     echo -e "${CBLANC}===============================================================================${CVOID}"
-    type "report_printHead1" >/dev/null 2>&1 && report_printHead1 "${MSG}" "$1" "$2" "$3" "$4" "$5" "$6" "$7" "$8" "$9"
+    Function.exists "Report.print.head1" && Report.print.head1 "${MSG}" "$1" "$2" "$3" "$4" "$5" "$6" "$7" "$8" "$9"
 }
 
 
@@ -117,24 +94,24 @@ function stdout_printHead1()
 # @param $1 : Message
 # @param $2 : Valeur à inclure dans le message
 ##
-function stdout_printHead2()
+function Print.head2()
 {
-    logger_debug "stdout_printHead2 ($1, $2)"
+    debug "Print.head2 ($1, $2)"
     echo
     echo -e "${CVIOLET}$(printf "$1" "${CCYAN}$2${CVIOLET}")${CVOID}"
     echo -e "${CBLANC}-------------------------------------------------------------------------------${CVOID}"
-    type "report_printHead2" >/dev/null 2>&1 && report_printHead2 "$1" "$2"
+    Function.exists "Report.print.head2" && Report.print.head2 "$1" "$2"
 }
 
 
 ###
 # Afficher une ligne
 ##
-function stdout_printLine()
+function Print.line()
 {
-    logger_debug "stdout_printLine ()"
+    debug "Print.line ()"
     echo -e "${CBLANC}-------------------------------------------------------------------------------${CVOID}"
-    type "report_printLine" >/dev/null 2>&1 && report_printLine
+    Function.exists "Report.print.line" && Report.print.line
 }
 
 
@@ -143,11 +120,25 @@ function stdout_printLine()
 # @param $1 : Message à afficher
 # @param $2 : Couleur du message
 ##
-function stdout_print()
+function Print.echo()
 {
-    logger_debug "stdout_print ($1, $2)"
+    debug "Print.echo ($1, $2)"
     echo -e "$2$1${CVOID}"
-    type "report_print" >/dev/null 2>&1 && report_print "$1"
+    Function.exists "Report.print.echo" && Report.print.echo "$1"
+}
+
+
+###
+# Affiche un message d'information simple
+# @param $1 : Message
+# @param $2 : Valeur
+##
+function Print.value()
+{
+    debug "Print.value ($1, $2)"
+    echo -en $1; String.pad "$1" 64 " "; echo -n " :"
+    echo -e " ${CBLEU}$2${CVOID}"
+    Function.exists "Report.print.value" && Report.print.value "$1" "$2"
 }
 
 
@@ -158,10 +149,10 @@ function stdout_print()
 # @param $3 : Message de retour
 # @param $4 : Temps d'execution
 ##
-function stdout_printMessageReturn()
+function Print.result()
 {
-    logger_debug "stdout_printMessageReturn ($1, $2, $3, $4)"
-    echo -en $2; stdout_strpad "$2" 64 " "; echo -n " :"
+    debug "Print.result ($1, $2, $3, $4)"
+    echo -en $2; String.pad "$2" 64 " "; echo -n " :"
     if [[ $1 -ne 0 ]]; then
         echo -e " ${CROUGE}ERROR${CVOID}"
     elif [[ -z $3 ]]; then
@@ -171,22 +162,8 @@ function stdout_printMessageReturn()
         echo -en " ${CVERT}$3${CVOID}"
         [[ ! -z $4 ]] && echo -e " ${Cvert}($4s)${CVOID}" || echo
     fi
-    type "report_printMessageReturn" >/dev/null 2>&1 && report_printMessageReturn "$1" "$2" "$3" "$4"
+    Function.exists "Report.print.result" && Report.print.result "$1" "$2" "$3" "$4"
     return $1
-}
-
-
-###
-# Affiche un message d'information simple
-# @param $1 : Message
-# @param $2 : Valeur
-##
-function stdout_printInfo()
-{
-    logger_debug "stdout_printInfo ($1, $2)"
-    echo -en $1; stdout_strpad "$1" 64 " "; echo -n " :"
-    echo -e " ${CBLEU}$2${CVOID}"
-    type "report_printInfo" >/dev/null 2>&1 && report_printInfo "$1" "$2"
 }
 
 
@@ -194,9 +171,9 @@ function stdout_printInfo()
 # Affiche le contenu d'un fichier
 # @param $1 : Nom du fichier
 ##
-function stdout_printFile()
+function Print.file()
 {
-    logger_debug "stdout_printFile ($1)"
+    debug "Print.file ($1)"
     cat $1
-    type "report_printFile" >/dev/null 2>&1 && report_printFile "$1"
+    Function.exists "Report.print.file" && Report.print.file "$1"
 }

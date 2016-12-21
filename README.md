@@ -8,24 +8,24 @@ Installation d'oliXsh
 
 Installation en mode direct
 ``` bash
-curl -s https://raw.githubusercontent.com/sabinus52/olixsh2/master/install.sh | bash -s -- [DOSSIER_DE_DESTINATION]
+curl -s https://raw.githubusercontent.com/sabinus52/olixsh/master/install.sh | bash -s -- [DOSSIER_DE_DESTINATION]
 ```
 avec *[DOSSIER_DE_DESTINATION]* le dossier d'installation (Par défaut `/opt`)
 
 ou récupérer les sources depuis le dépôt Git :
 ``` bash
-git clone https://github.com/sabinus52/olixsh2.git
+git clone https://github.com/sabinus52/olixsh.git
 ```
 ou bien
 ``` bash
-wget https://github.com/sabinus52/olixsh2/archive/[version].tar.gz
+wget https://github.com/sabinus52/olixsh/archive/[version].tar.gz
 tar xzf [version].tar.gz -C [dest dir]
-mv [dest dir]/olixsh2-[version] [dest dir]/olixsh
+mv [dest dir]/olixsh-[version] [dest dir]/olixsh
 ```
 
 Exécution du script pour l'installation dans le système
 ```
-sudo ./olixsh install olix
+sudo ./olixsh install olixsh
 ```
 
 
