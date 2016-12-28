@@ -44,7 +44,7 @@ OLIX_LOGGER_LEVEL="debug"    # Niveau de log
 OLIX_LOGGER_FACILITY="user"  # Origine de l'erreur
 OLIX_LOGGER_FILE="/tmp/olixsh.log" # Fichier de log principal
 OLIX_LOGGER_BUFFER=""       # Buffer du log
-OLIX_LOGGER_FILE_ERR=$(mktemp --dry-run /tmp/olix.err.XXXXXXXXXX) # Fichier de sortie d'erreur
+OLIX_LOGGER_FILE_ERR=$(mktemp /tmp/olix.err.XXXXXXXXXX) # Fichier de sortie d'erreur
 
 
 ###
