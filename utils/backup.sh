@@ -91,13 +91,13 @@ function Backup.continue()
     OLIX_BACKUP_FILE=$1
     OLIX_BACKUP_FILE_PREFIX=$2
 
-    utils_backup_compress || return 1
+    utils_backup_compress || return 1
 
-    utils_backup_ftp || return 1 
+    utils_backup_ftp || return 1
 
     utils_backup_move || return 1
 
-    utils_backup_purge || return 1
+    utils_backup_purge || return 1
 
     return 0
 }
