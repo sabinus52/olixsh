@@ -42,8 +42,9 @@ function Filesystem.purge.standard()
     local FREDIRECT
     [[ -z $4 ]] && FREDIRECT="/dev/null" || FREDIRECT=$4
     debug "Filesystem.purge.standard ($1, $2, $3, $FREDIRECT)"
-    #find $1 -name "$2*" -mtime +$3 -fprintf ${FREDIRECT} "%f\n" -delete > /dev/null 2> ${OLIX_LOGGER_FILE_ERR}
-    find $1 -mindepth 1 -maxdepth 1 -name "$2*" -mtime +$3 -printf "%f\n" -delete |sort > $FREDIRECT 2> ${OLIX_LOGGER_FILE_ERR}
+    local TTL=$(( $3 * 60 * 24 ))
+    debug "find $1 -mindepth 1 -maxdepth 1 -name '$2*' -follow -mmin +${TTL}"
+    find $1 -mindepth 1 -maxdepth 1 -name "$2*" -follow -mmin +$TTL -printf "%f\n" -delete |sort > $FREDIRECT 2> ${OLIX_LOGGER_FILE_ERR}
     return $?
 }
 

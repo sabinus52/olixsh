@@ -91,13 +91,13 @@ function Backup.continue()
     OLIX_BACKUP_FILE=$1
     OLIX_BACKUP_FILE_PREFIX=$2
 
-    utils_backup_compress || return 1
+    utils_backup_compress || return 1
 
-    utils_backup_ftp || return 1 
+    utils_backup_ftp || return 1
 
     utils_backup_move || return 1
 
-    utils_backup_purge || return 1
+    utils_backup_purge || return 1
 
     return 0
 }
@@ -256,7 +256,7 @@ function utils_backup_purge()
     [[ ${RET} -ne 0 ]] && warning && return 1
 
     Print.value "Liste des sauvegardes restantes" "$(find $OLIX_BACKUP_PATH -maxdepth 1 -name "$OLIX_BACKUP_FILE_PREFIX*" | wc -l)"
-    find $OLIX_BACKUP_PATH -maxdepth 1 -name "$OLIX_BACKUP_FILE_PREFIX*" -printf "%f\n" |sort > $LIST_FILE_PURGED
+    find $OLIX_BACKUP_PATH -maxdepth 1 -name "$OLIX_BACKUP_FILE_PREFIX*" -follow -printf "%f\n" |sort > $LIST_FILE_PURGED
     RET=$?
     Print.file $LIST_FILE_PURGED
 

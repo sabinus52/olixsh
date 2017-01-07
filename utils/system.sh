@@ -105,12 +105,21 @@ function System.partitions()
 }
 
 ###
+# Retourne la liste des montages des partitions
+##
+function System.partitions.mount()
+{
+    debug "System.partitions.mount ()"
+    lsblk -nr -o FSTYPE,MOUNTPOINT | egrep -v "^LVM2|^swap|^\s" | awk '{ print $2}'
+}
+
+###
 # Retourne le nom de la partition
 # @param $1 : UUID
 ##
-function System.partion.name()
+function System.partition.name()
 {
-    debug "System.partion.name ($1)"
+    debug "System.partition.name ($1)"
     df /dev/disk/by-uuid/$1 | awk '{ print $1}' | tail -1
 }
 
@@ -118,18 +127,29 @@ function System.partion.name()
 # Retourne l'utilisation d'une partition
 # @param $1 : UUID
 ##
-function System.partion.utilisation()
+function System.partition.utilisation()
 {
-    debug "System.partion.utilisation ($1)"
-    df /dev/disk/by-uuid/$1 | awk '{ print $5}' | tail -1
+    debug "System.partition.utilisation ($1)"
+    df /dev/disk/by-uuid/$1 | awk '{ print $5}' | tail -1 | tr -d '%'
 }
 
 ###
-# Retourne l'le type de système de fichier d'une partition
+# Retourne le type de système de fichier d'une partition
 # @param $1 : UUID
 ##
-function System.partion.fstype()
+function System.partition.fstype()
 {
-    debug "System.partion.fstype ($1)"
+    debug "System.partition.fstype ($1)"
     lsblk /dev/disk/by-uuid/$1 -o FSTYPE -n
+}
+
+
+###
+# Retourne le point de montage d'une partition
+# @param $1 : UUID
+##
+function System.partition.mount()
+{
+    debug "System.partition.mount ($1)"
+    lsblk /dev/disk/by-uuid/$1 -o MOUNTPOINT -n
 }

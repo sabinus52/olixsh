@@ -76,6 +76,7 @@ function Fileconfig.param.set()
         VALUE=$OLIX_FUNCTION_RETURN
     else
         # Sinon on vérifie la valeur
+        OLIX_FUNCTION_RETURN=$VALUE
         Fileconfig.param.check $1 $2 $VALUE
         [[ $? -ne 0 ]] && return 104
     fi
@@ -105,15 +106,15 @@ function Fileconfig.param.check()
 
         select)
             local VALUES="$(Config.param.values $1 $2)"
-            ! String.list.contains "$3" "$VALUES" && return 1
+            ! String.list.contains "$VALUES" "$3" && return 1
             ;;
 
         digit)
-            ! String.digit $2 && return 1
+            ! String.digit $3 && return 1
             ;;
 
         file)
-            [[ ! -f $2 && ! -r $2 ]] && return 1
+            [[ ! -f $3 && ! -r $3 ]] && return 1
             ;;
 
     esac
