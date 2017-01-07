@@ -4,5 +4,5 @@
 olixsh|https://github.com/sabinus52/olixsh/archive/master.tar.gz|
 debian|https://github.com/sabinus52/olixshmodule-debian/archive/master.tar.gz|Installation et gestion des packages Debian
 mysql|https://github.com/sabinus52/olixshmodule-mysql/archive/master.tar.gz|Utilitaires pour les bases mysql
-postgres|https://github.com/repos/sabinus52/olixshmodule-postgres/archive/master.tar.gz|Utilitaires pour les bases postgres
-webapp|https://github.com/repos/sabinus52/olixshmodule-webapp/archive/master.tar.gz|Gestion des applications web
+postgres|https://github.com/sabinus52/olixshmodule-postgres/archive/master.tar.gz|Utilitaires pour les bases postgres
+webapp|https://github.com/sabinus52/olixshmodule-webapp/archive/master.tar.gz|Gestion des applications web
