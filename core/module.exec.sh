@@ -105,7 +105,7 @@ function Module.execute.action()
     Config.load $OLIX_MODULE_NAME
     # Chargement du parsing des paramètres
     if Function.exists "olixmodule_${OLIX_MODULE_NAME}_params_parse"; then
-        info "Parsind des paramètres"
+        info "Parsing des paramètres"
         olixmodule_${OLIX_MODULE_NAME}_params_parse "${ACTION}" $@
     fi
     # Chargement du début du script
