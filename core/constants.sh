@@ -31,6 +31,12 @@ OLIX_OPTION_LIST=false
 
 
 ###
+# Code retour global du script
+##
+OLIX_CODE_RETURN=0
+
+
+###
 # Variable contenant une valeur de retour d'une fonction
 ##
 OLIX_FUNCTION_RETURN=
