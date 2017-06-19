@@ -81,23 +81,33 @@ function Backup.path()
 
 
 ###
+# Purge des anciens dumps
+# @param $1 : Prefix du fichier
+##
+function Backup.purge()
+{
+    debug "Backup.purge ($1)"
+    OLIX_BACKUP_FILE_PREFIX=$1
+
+    utils_backup_purge || return 1
+    return 0
+}
+
+
+###
 # Finalise la sauvegarde d'un fichier -> Compression -> transfert FTP -> Purge
 # @param $1 : Nom du fichier sauvegardé
-# @pâram $2 : Prefix du fichier
 ##
 function Backup.continue()
 {
     debug "Backup.continue ($1)"
     OLIX_BACKUP_FILE=$1
-    OLIX_BACKUP_FILE_PREFIX=$2
 
     utils_backup_compress || return 1
 
     utils_backup_ftp || return 1
 
     utils_backup_move || return 1
-
-    utils_backup_purge || return 1
 
     return 0
 }

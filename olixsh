@@ -132,6 +132,6 @@ fi
 
 
 ###
-# Sortie sans erreur
+# Sortie avec code retour global
 ##
-die 0
+die $OLIX_CODE_RETURN
