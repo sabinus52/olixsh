@@ -7,3 +7,4 @@ mysql|https://github.com/sabinus52/olixshmodule-mysql/archive/master.tar.gz|Util
 postgres|https://github.com/sabinus52/olixshmodule-postgres/archive/master.tar.gz|Utilitaires pour les bases postgres
 webapp|https://github.com/sabinus52/olixshmodule-webapp/archive/master.tar.gz|Gestion des applications web
 monitor|https://github.com/sabinus52/olixshmodule-monitor/archive/master.tar.gz|Check pour le monitoring des systèmes
+backup|https://github.com/sabinus52/olixshmodule-backup/archive/master.tar.gz|Sauvegarde des bases et dossiers
