@@ -168,6 +168,42 @@ function Print.result()
 
 
 ###
+# Affiche le message d'information de retour d'un check
+# @param $1 : Valeur de retour
+# @param $2 : Message
+##
+function Print.check()
+{
+    debug "Print.check ($1, $2)"
+    echo -en $2; String.pad "$2" 64 " "; echo -n " :"
+    if [[ $1 -gt 100 ]]; then
+        echo -e " ${CROUGE}ERROR${CVOID}"
+    elif [[ $1 -eq 0 ]]; then
+        echo -e " ${CVERT}OK${CVOID}"
+    else
+        echo -e " ${CJAUNE}WARNING${CVOID}"
+    fi
+    Function.exists "Report.print.result" && Report.print.result "$1" "$2"
+    return $1
+}
+
+
+###
+# Affiche une liste d'élément
+# @param $1 : Message à afficher
+##
+function Print.list()
+{
+    debug "Print.list ($1, $2)"
+    local I
+    for I in $1; do
+        echo $I
+    done
+    Function.exists "Report.print.list" && Report.print.list "$1" $2
+}
+
+
+###
 # Affiche le contenu d'un fichier
 # @param $1 : Nom du fichier
 ##

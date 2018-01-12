@@ -20,6 +20,16 @@ function File.exists()
 
 
 ###
+# Si le fichier peut être lu
+##
+function File.readable()
+{
+    [[ -z $1 ]] && return 1
+    [[ -r $1 ]] && return 0 || return 1
+}
+
+
+###
 # Vérifie si un fichier peut être créé
 ##
 function File.created()

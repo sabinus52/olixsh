@@ -51,6 +51,24 @@ function Array.index()
 
 
 ###
+# Retourne le premier le liste
+##
+function Array.first()
+{
+    eval echo \${${1}[0]}
+}
+
+
+###
+# Retourne le dernier de la liste
+##
+function Array.last()
+{
+    eval echo \${${1}[*]: -1}
+}
+
+
+###
 # Retourne un élément par son index
 ##
 function Array.get()
