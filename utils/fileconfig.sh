@@ -132,7 +132,7 @@ function Fileconfig.param.read()
     debug "Fileconfig.param.read ($1, $2)"
 
     # Valeur par défaut dans le fichier de conf
-    local DEFAULT=$(Config.param.default $1 $2)
+    local DEFAULT=$(Config.param.get $1 $2)
     local TYPE=$(Config.param.type $1 $2)
     
     case $TYPE in

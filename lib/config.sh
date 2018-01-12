@@ -86,8 +86,28 @@ function Config.param.set()
     # Gestion des slash "/"
     local REPLACE=$(echo $3 | sed 's/\//\\\//g')
 
-    sed -i "s/^\($PARAM\s*=\s*\).*\$/\1$REPLACE/" $FILECONF 2> ${OLIX_LOGGER_FILE_ERR}
+    sed -i "s/^\($PARAM\s*=\s*\).*\$/\1\"$REPLACE\"/" $FILECONF 2> ${OLIX_LOGGER_FILE_ERR}
     return $?
+}
+
+
+###
+# Récupère la valeur du paramètre de configuration dans le fichier de conf
+# @param $2 : Nom du paramètre
+##
+function Config.param.get()
+{
+    debug "Config.param.get ($1, $2)"
+
+    local FILECONF=$(Config.fileName $1)
+    [[ ! -r $FILECONF ]] && return 101
+    [[ ! -w $FILECONF ]] && return 102
+
+    local REALNAME=$(Config.param.system $1 $2)
+    #set -x
+    eval String.explode.value $(grep "^$REALNAME=" $FILECONF)
+    #set +x
+    return 0
 }
 
 
@@ -98,7 +118,7 @@ function Config.param.set()
 ##
 function Config.param.metadata()
 {
-    local FILECONF=$(Config.fileName $1)
+    local FILECONF=$(Config.template $1)
     [[ ! -r $FILECONF ]] && return 1
 
     grep "^# @$3 $2=" $FILECONF | sed "s/^# @$3 $2=//"
@@ -147,7 +167,7 @@ function Config.param.values()
 ##
 function Config.param.default()
 {
-    local FILECONF=$(Config.fileName $1)
+    local FILECONF=$(Config.template $1)
     [[ ! -r $FILECONF ]] && return 1
 
     local REALNAME=$(Config.param.system $1 $2)
@@ -155,4 +175,27 @@ function Config.param.default()
     eval String.explode.value $(grep "^$REALNAME=" $FILECONF)
     #grep "^$2=" ${FILECONF} | sed "s/^$REALNAME=//"
     #return ${PIPESTATUS}
+}
+
+
+###
+# Récupère dynamiquement la valeur d'un paramètre
+# @param $2 : Nom du paramètre
+##
+function Config.dynamic.get()
+{
+    local REALNAME=$(Config.param.system $1 $2)
+    eval echo -n \$$(String.upcase "$REALNAME")
+}
+
+
+###
+# Affecte une valeur dans un paramètre dynamiquement
+# @param $2 : Nom du paramètre
+# @param $3 : Valeur du paramètre
+##
+function Config.dynamic.set()
+{
+    local REALNAME=$(Config.param.system $1 $2)
+    eval "$(String.upcase "$REALNAME")=\"$3\""
 }
