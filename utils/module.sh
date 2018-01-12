@@ -65,7 +65,7 @@ function Module.install()
         [[ $? -ne 0 ]] && critical "Impossible de déployer le fichier de configuration du module $1"
     else
         Fileconfig.update $1
-        [[ $? -ne 0 ]] && critical "Une erreur s'est produite pendant la mise à jour du fichier de configuration $(Fileconfig.fileName $1). Une sauvegarde est disposnible dans ${OLIX_CORE_PATH_CONFIG}"
+        [[ $? -ne 0 ]] && critical "Une erreur s'est produite pendant la mise à jour du fichier de configuration $(Config.fileName $1). Une sauvegarde est disposnible dans ${OLIX_CORE_PATH_CONFIG}"
     fi
 
     source $(Module.script "$1")
