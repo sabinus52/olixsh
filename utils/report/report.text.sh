@@ -114,6 +114,20 @@ function Report.print.value()
 
 
 ###
+# Affiche une liste d'élément
+# @param $1 : Message à afficher
+##
+function Report.print.list()
+{
+    debug "Report.print.list ($1)"
+    local I
+    for I in $1; do
+        echo $I >> $OLIX_REPORT_FILENAME
+    done
+}
+
+
+###
 # Affiche le contenu d'un fichier
 # @param $1 : Nom du fichier
 ##
