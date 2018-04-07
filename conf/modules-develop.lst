@@ -1,0 +1,10 @@
+###
+# DON'T TOUCH
+##
+olixsh|https://github.com/sabinus52/olixsh/archive/develop.tar.gz|
+debian|https://github.com/sabinus52/olixshmodule-debian/archive/develop.tar.gz|Installation et gestion des packages Debian
+mysql|https://github.com/sabinus52/olixshmodule-mysql/archive/develop.tar.gz|Utilitaires pour les bases mysql
+postgres|https://github.com/sabinus52/olixshmodule-postgres/archive/develop.tar.gz|Utilitaires pour les bases postgres
+webapp|https://github.com/sabinus52/olixshmodule-webapp/archive/develop.tar.gz|Gestion des applications web
+monitor|https://github.com/sabinus52/olixshmodule-monitor/archive/develop.tar.gz|Check pour le monitoring des systèmes
+backup|https://github.com/sabinus52/olixshmodule-backup/archive/develop.tar.gz|Sauvegarde des bases et dossiers

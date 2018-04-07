@@ -22,6 +22,18 @@ OLIX_REPORT_EMAIL=
 
 
 ###
+# Vérifie le valeur du format du rapport
+# @param $1 : Type du rapport texte ou html
+##
+function Report.check.format()
+{
+    debug "Report.check.format ($1)"
+    String.list.contains "text html" $1
+    return $?
+}
+
+
+###
 # Initialise le rapport
 # @param $1 : Type du rapport texte ou html
 # @param $2 : Chemin du fichier du rapport
@@ -88,6 +100,21 @@ function Report.terminate()
 
 
 ###
+# Rapport critique
+# @param $1 : Message d'erreur
+##
+function Report.critical()
+{
+    debug "Report.critical ($1)"
+
+    [[ -n $1 ]] && Report.print.echo "$1" "color:red;"
+    [[ -s $OLIX_LOGGER_FILE_ERR ]] && Report.print.file "$OLIX_LOGGER_FILE_ERR" "color:red;"
+    Report.terminate "ERREUR"
+    return 0
+}
+
+
+###
 # Rapport d'erreur
 # @param $1 : Message d'erreur
 ##
@@ -97,7 +124,6 @@ function Report.error()
 
     [[ -n $1 ]] && Report.print.echo "$1" "color:red;"
     [[ -s $OLIX_LOGGER_FILE_ERR ]] && Report.print.file "$OLIX_LOGGER_FILE_ERR" "color:red;"
-    Report.terminate "ERREUR"
     return 0
 }
 

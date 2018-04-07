@@ -115,7 +115,7 @@ function Module.url()
 ##
 function Module.all.installed()
 {
-    find $OLIX_MODULE_PATH -maxdepth 1 -mindepth 1 -type d -exec basename {} \; | sort
+    find -L $OLIX_MODULE_PATH -maxdepth 1 -mindepth 1 -type d -exec basename {} \; | sort
 }
 
 

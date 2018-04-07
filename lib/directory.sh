@@ -20,6 +20,26 @@ function Directory.exists()
 
 
 ###
+# Si le dossier est en lecture
+##
+function Directory.readable()
+{
+    [[ -z $1 ]] && return 1
+    [[ -r $1 ]] && return 0 || return 1
+}
+
+
+###
+# Si le dossier est en ecriture
+##
+function Directory.writable()
+{
+    [[ -z $1 ]] && return 1
+    [[ -w $1 ]] && return 0 || return 1
+}
+
+
+###
 # Propriétaire et groupe d'appartenance du fichier
 ##
 function Directory.owner()

@@ -124,6 +124,23 @@ function Report.print.value()
 
 
 ###
+# Affiche une liste d'élément
+# @param $1 : Liste
+# @param $2 : Style CSS
+##
+function Report.print.list()
+{
+    debug "Report.print.list ($1, $2)"
+    local I
+    echo "<p style=\"font-family:'Courier New',monospace; margin:0; padding:0;$2\">" >> $OLIX_REPORT_FILENAME
+    for I in $1; do
+        echo "$I<br>" >> $OLIX_REPORT_FILENAME
+    done
+    echo '</p>' >> $OLIX_REPORT_FILENAME
+}
+
+
+###
 # Affiche le contenu d'un fichier
 # @param $1 : Nom du fichier
 # @param $2 : Style CSS

@@ -128,7 +128,7 @@ function String.explode.value()
 {
     local DELIMITER="="
     [[ -n $2 ]] && DELIMITER=$2
-    echo $(String.explode $1 2 "$DELIMITER")
+    echo $(String.explode "$1" 2 "$DELIMITER")
     #IFS='=' read -ra PARAM <<< "$1"
     #echo ${PARAM[1]}
 }
@@ -141,7 +141,7 @@ function String.explode.param()
 {
     local DELIMITER="="
     [[ -n $2 ]] && DELIMITER=$2
-    echo $(String.explode $1 1 "$DELIMITER")
+    echo $(String.explode "$1" 1 "$DELIMITER")
 }
 
 

@@ -48,13 +48,13 @@ function Fileconfig.update()
     cp $TEMPLATE $FILECONF 2> ${OLIX_LOGGER_FILE_ERR} || return 1
 
     # Remet les valeurs personnalisés
-    for I in $(grep '^OLIX_.*' $FILEDIFF); do
-        PARAM=$(String.explode.param $I)
-        debug "Param updated --> $I"
-        REPLACE=$(echo $I | sed 's/\//\\\//g')
+    while IFS='\n' read LINE; do
+        PARAM=$(String.explode.param "$LINE")
+        REPLACE=$(echo $LINE | sed 's/\//\\\//g')
+        debug "Param updated --> $PARAM=$REPLACE"
         sed -i "s/^\($PARAM\s*=\s*.*\)\$/$REPLACE/" $FILECONF 2> ${OLIX_LOGGER_FILE_ERR}
         [[ $? -ne 0 ]] && ERROR=1
-    done
+    done < <(grep '^OLIX_.*' $FILEDIFF)
     return $ERROR
 }
 
@@ -132,7 +132,7 @@ function Fileconfig.param.read()
     debug "Fileconfig.param.read ($1, $2)"
 
     # Valeur par défaut dans le fichier de conf
-    local DEFAULT=$(Config.param.default $1 $2)
+    local DEFAULT=$(Config.param.get $1 $2)
     local TYPE=$(Config.param.type $1 $2)
     
     case $TYPE in

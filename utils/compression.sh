@@ -8,15 +8,42 @@
 
 
 ###
+# Retourne l'extension du compression
+# @param $1 : Mode de compression
+##
+function Compression.extension()
+{
+    case $(String.lower $1) in
+        bz|bz2) echo -n "bz2";;
+        gz)     echo -n "gz";;
+        *)      echo -n "";;
+    esac
+}
+
+
+###
+# Retourne le binaire de compression
+# @param $1 : Mode de compression
+##
+function Compression.binary()
+{
+    case $(String.lower $1) in
+        bz|bz2) echo -n "bzip2";;
+        gz)     echo -n "gzip";;
+    esac
+}
+
+
+###
 # Retourne l'extension du compression d'un TAR
 # @param $1 : Mode de compression
 ##
 function Compression.tar.extension()
 {
     case $(String.lower $1) in
-        bz|bz2) echo -n ".tbz";;
-        gz)     echo -n ".tgz";;
-        *)      echo -n ".tar";;
+        bz|bz2) echo -n "tbz";;
+        gz)     echo -n "tgz";;
+        *)      echo -n "tar";;
     esac
 }
 
