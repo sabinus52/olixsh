@@ -1,5 +1,6 @@
 /conf/*
 !/conf/modules.lst
+!/conf/modules-develop.lst
 !/conf/*.conf
 /completion/*
 !/completion/olixmain
