@@ -161,19 +161,32 @@ function Scp.remove()
 {
     debug "Scp.remove ($1)"
     [[ $1 == "/" ]] && return 1
-    ssh -n -- $OLIX_SCP_PARAM $OLIX_SCP_CONNECTION "rm -rf $1" 2>> ${OLIX_LOGGER_FILE_ERR}
+    ssh -n -- $OLIX_SCP_PARAM $OLIX_SCP_CONNECTION "rm -f $1" 2>> ${OLIX_LOGGER_FILE_ERR}
     return $?
 }
 
 
 ###
 # Création d'un dossier sur un serveur SSH
-# @param $1 : Nom du fichier à créer
+# @param $1 : Nom du dossier à créer
 # @param $2 : Dossier de dépôt du serveur SSH
 ##
 function Scp.mkdir()
 {
     debug "Scp.mkdir ($1, $2)"
     ssh -n -- $OLIX_SCP_PARAM $OLIX_SCP_CONNECTION "mkdir -p $2/$1" 2>> ${OLIX_LOGGER_FILE_ERR}
+    return $?
+}
+
+
+###
+# Suppression d'un dossier sur un serveur SSH
+# @param $1 : Nom du dossier à supprimer
+##
+function Scp.rmdir()
+{
+    debug "Scp.rmdir ($1)"
+    [[ $1 == "/" ]] && return 1
+    ssh -n -- $OLIX_SCP_PARAM $OLIX_SCP_CONNECTION "rm -rf $1" 2>> ${OLIX_LOGGER_FILE_ERR}
     return $?
 }
