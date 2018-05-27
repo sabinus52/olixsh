@@ -117,12 +117,24 @@ function Ftp.remove()
 
 ###
 # Création d'un dossier sur un serveur FTP
-# @param $1 : Nom du fichier à créer
+# @param $1 : Nom du dossier à créer
 # @param $2 : Dossier de dépôt du serveur FTP
 ##
 function Ftp.mkdir()
 {
     debug "Ftp.mkdir ($1, $2)"
     lftp $OLIX_FTP_CONNECTION -e "cd $2; mkdir $1; quit" > /dev/null 2>> ${OLIX_LOGGER_FILE_ERR}
+    return $?
+}
+
+
+###
+# Suppression d'un dossier sur un serveur FTP
+# @param $1 : Nom du dossier à supprimer
+##
+function Ftp.rmdir()
+{
+    debug "Ftp.rmdir ($1)"
+    lftp $OLIX_FTP_CONNECTION -e "rm -r $1; quit" > /dev/null 2>> ${OLIX_LOGGER_FILE_ERR}
     return $?
 }
