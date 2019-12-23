@@ -25,13 +25,13 @@ function Module.download()
     local URL=$(Module.url $1)
     info "Téléchargement du module à l'adresse ${URL}"
 
-    local OPTS="--tries=3 --timeout=30 --no-check-certificate"
-    [[ $OLIX_OPTION_VERBOSEDEBUG == true ]] && OPTS="$OPTS --debug"
-    [[ $OLIX_OPTION_VERBOSE == false ]] && OPTS="$OPTS --quiet"
-    OPTS="$OPTS --output-document=/tmp/olix.tar.gz"
-    debug "wget ${OPTS} ${URL}"
+    local OPTS="--insecure --location"
+    [[ $OLIX_OPTION_VERBOSEDEBUG == true ]] && OPTS="$OPTS --verbose"
+    [[ $OLIX_OPTION_VERBOSE == false ]] && OPTS="$OPTS"
+    OPTS="$OPTS --output /tmp/olix.tar.gz"
+    debug "curl ${OPTS} ${URL}"
 
-    wget $OPTS $URL
+    curl $OPTS $URL
     return $?
 }
 
@@ -167,13 +167,13 @@ function Module.install.myrepository()
 {
     debug "Module.install.myrepository ()"
 
-    local OPTS="--tries=3 --timeout=30 --no-check-certificate"
-    [[ $OLIX_OPTION_VERBOSEDEBUG == true ]] && OPTS="$OPTS --debug"
-    [[ $OLIX_OPTION_VERBOSE == false ]] && OPTS="$OPTS --quiet"
-    OPTS="$OPTS --output-document=/tmp/olix.tar.gz"
-    debug "wget ${OPTS} --output-document=${OLIX_MODULE_REPOSITORY_USER} ${OLIX_MODULE_REPOSITORY_URL}"
+    local OPTS="--insecure --location"
+    [[ $OLIX_OPTION_VERBOSEDEBUG == true ]] && OPTS="$OPTS --verbose"
+    [[ $OLIX_OPTION_VERBOSE == false ]] && OPTS="$OPTS"
+    OPTS="$OPTS --output ${OLIX_MODULE_REPOSITORY_USER}"
+    debug "curl ${OPTS} ${OLIX_MODULE_REPOSITORY_URL}"
 
-    wget $OPTS --output-document=$OLIX_MODULE_REPOSITORY_USER $OLIX_MODULE_REPOSITORY_URL
+    curl $OPTS $OLIX_MODULE_REPOSITORY_URL
     return $?
 }
 
