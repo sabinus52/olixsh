@@ -17,7 +17,7 @@ load "utils/fileconfig.sh"
 # Constantes
 ##
 OLIX_COMMAND_COMPLETION="/etc/bash_completion.d/olixsh.sh"
-OLIX_BINARIES_REQUIRED="logger gzip tar wget"
+OLIX_BINARIES_REQUIRED="logger gzip tar curl"
 
 # Force l'activation des warnings
 OLIX_OPTION_WARNINGS=true

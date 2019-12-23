@@ -7,3 +7,8 @@
 /modules/*
 !/modules/empty
 /archive.sh
+olixsh-get-archives-from-forge.sh
+docs/__TOKEN_FORGE__
+docs/DGAC.md
+docs/MODULES.md
+*.code-workspace

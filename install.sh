@@ -15,7 +15,7 @@ DESTINATION="/opt"
 
 # Téléchargement
 echo "Téléchargement des sources à l'adresse (${REPOSITORY})"
-wget --tries=3 --timeout=30 --no-check-certificate --output-document=${TARBALL} ${REPOSITORY}
+curl --insecure --location --output ${TARBALL} ${REPOSITORY}
 [[ $? -ne 0 ]] && echo "Erreur lors du téléchargement des sources" && exit 1
 
 
