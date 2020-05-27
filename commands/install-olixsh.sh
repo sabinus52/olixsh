@@ -95,6 +95,7 @@ fi
 # Créer le fichier de la completion
 ##
 info "Création du fichier ${OLIX_COMMAND_COMPLETION}"
+[[ ! -d $(dirname $OLIX_COMMAND_COMPLETION) ]] && mkdir $(dirname $OLIX_COMMAND_COMPLETION) 2> /dev/null
 if [[ -d $(dirname $OLIX_COMMAND_COMPLETION) ]]; then
 
     debug "cat > ${OLIX_COMMAND_COMPLETION}"
