@@ -6,9 +6,8 @@
 !/completion/olixmain
 /modules/*
 !/modules/empty
-/archive.sh
 olixsh-get-archives-from-forge.sh
+*.dev.sh
 docs/__TOKEN_FORGE__
-docs/DGAC.md
-docs/MODULES.md
+docs/*.x.md
 *.code-workspace
