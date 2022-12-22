@@ -266,7 +266,7 @@ function utils_backup_purge()
     [[ ${RET} -ne 0 ]] && warning && return 1
 
     Print.value "Liste des sauvegardes restantes" "$(find $OLIX_BACKUP_PATH -maxdepth 1 -name "$OLIX_BACKUP_FILE_PREFIX*" | wc -l)"
-    find $OLIX_BACKUP_PATH -maxdepth 1 -name "$OLIX_BACKUP_FILE_PREFIX*" -follow -printf "%f\n" |sort > $LIST_FILE_PURGED
+    find $OLIX_BACKUP_PATH -maxdepth 1 -name "$OLIX_BACKUP_FILE_PREFIX*" -follow -print |sort > $LIST_FILE_PURGED
     RET=$?
     Print.file $LIST_FILE_PURGED
 

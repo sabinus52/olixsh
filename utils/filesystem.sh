@@ -44,7 +44,7 @@ function Filesystem.purge.standard()
     debug "Filesystem.purge.standard ($1, $2, $3, $FREDIRECT)"
     local TTL=$(( $3 * 60 * 24 ))
     debug "find $1 -mindepth 1 -maxdepth 1 -name '$2*' -follow -mmin +${TTL}"
-    find $1 -mindepth 1 -maxdepth 1 -name "$2*" -follow -mmin +$TTL -printf "%f\n" -delete |sort > $FREDIRECT 2> ${OLIX_LOGGER_FILE_ERR}
+    find $1 -mindepth 1 -maxdepth 1 -name "$2*" -follow -mmin +$TTL -print -delete |sort > $FREDIRECT 2> ${OLIX_LOGGER_FILE_ERR}
     return $?
 }
 
@@ -84,6 +84,6 @@ function Filesystem.purge.logarithmic()
         find $1 -maxdepth 1 -name $FILE* -exec touch \{\} \; 2> /dev/null
     done
     #find $1 -name "$2*" -mtime +0 -fprintf ${FREDIRECT} "%f\n" -delete > /dev/null 2> ${OLIX_LOGGER_FILE_ERR}
-    find $1 -maxdepth 1 -name "$2*" -mtime +0 -printf "%f\n" -delete |sort > $FREDIRECT 2> ${OLIX_LOGGER_FILE_ERR}
+    find $1 -maxdepth 1 -name "$2*" -mtime +0 -print -delete |sort > $FREDIRECT 2> ${OLIX_LOGGER_FILE_ERR}
     return $?
 }
